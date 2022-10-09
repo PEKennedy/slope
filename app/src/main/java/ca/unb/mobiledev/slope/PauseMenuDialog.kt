@@ -30,6 +30,7 @@ class PauseMenuDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFrag
             activityHandle.close()
         }
         btnClose.setOnClickListener {
+            activityHandle.unPause()
             this.dismiss()
         }
 
