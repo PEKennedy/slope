@@ -1,5 +1,6 @@
 package ca.unb.mobiledev.slope
 
+import android.graphics.Canvas
 import android.util.Log
 
 open class GameObject(protected val id: Int) {
@@ -10,10 +11,10 @@ open class GameObject(protected val id: Int) {
     }
 
     open fun update(deltaT : Long){
-        Log.i("gameThread", "Called from object id:$id")
+        //Log.i("gameThread", "Called from object id:$id")
     }
 
-    open fun render(){
-
+    open fun render(canvas: Canvas){
+        //Log.i("renderThread", "Called render obj id:$id")
     }
 }

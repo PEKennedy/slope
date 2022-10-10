@@ -26,6 +26,14 @@ class GameView (context: Context, attributeSet: AttributeSet) : View(context, at
         canvas.drawBitmap(extraBitmap, 0f, 0f, null)
     }
 
+    public fun getCanvas(): Canvas {
+        return extraCanvas
+    }
+
+    public fun isCanvasInit(): Boolean {
+        return this::extraCanvas.isInitialized
+    }
+
     /*override fun onTouchEvent(event: MotionEvent): Boolean {
         motionTouchEventX = event.x
         motionTouchEventY = event.y

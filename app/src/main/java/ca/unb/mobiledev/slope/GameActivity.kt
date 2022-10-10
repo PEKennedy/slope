@@ -1,5 +1,7 @@
 package ca.unb.mobiledev.slope
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -14,20 +16,27 @@ interface CloseHandle {
 class GameActivity : AppCompatActivity(), CloseHandle {
 
     private val pauseMenu = PauseMenuDialog(this)
+    //private val gameView = findViewById<GameView>(R.id.canvas)
 
     private var id = 0
-    private val testObj = GameObject(id++)
-    private val testObj2 = GameObject(id++)
-    private val testObj3 = TestCircle(id++)
 
-    private val gameObjects = listOf<GameObject>(testObj, testObj2, testObj3)
+
+
     private var lastTime = System.currentTimeMillis()
     private var curTime = lastTime
     private var deltaT = 0L
 
     private var isPaused = false
 
-    private val gameJob = startGameJob() //keep this after gameObjects list
+    val testObj = GameObject(id++)
+    val testObj2 = GameObject(id++)
+    val testObj3 = TestCircle(id++)
+    val gameObjects = listOf<GameObject>(testObj, testObj2, testObj3)
+
+    val gameJob = startGameJob(gameObjects) //keep this after gameObjects list
+    //private val renderJob = startRenderJob()
+    lateinit var renderJob: Job
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +45,15 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         btnPause.setOnClickListener {
             pause()
         }
+        //these used to be private vars outside onCreate
+        val gameView = findViewById<GameView>(R.id.canvas)
+        renderJob = startRenderJob(gameView, gameObjects)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         gameJob.cancel()
+        renderJob.cancel()
     }
 
     private fun pause(){
@@ -57,7 +70,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         isPaused = false
     }
 
-    private fun startGameJob(): Job { //timeInterval: Long
+    private fun startGameJob(gameObjects: List<GameObject>): Job { //timeInterval: Long
         gameObjects.forEach {
             it.start()
         }
@@ -72,16 +85,44 @@ class GameActivity : AppCompatActivity(), CloseHandle {
                     gameObjects.forEach {
                         if(it.isActive){
                             it.update(deltaT)
+                            //it.render(gameView)
                             //it.render()
                         }
                     }
 
                     //delay(timeInterval)
-                    delay(1000)
-
+                    //delay(50)
+                    delay(16)
 
                 }
             }
+        }
+    }
+
+   private fun startRenderJob(gameView: GameView, gameObjects: List<GameObject>): Job {
+
+       return CoroutineScope(Dispatchers.Default).launch {
+           while(!gameView.isCanvasInit()){
+               delay(1)
+           }
+           val canvas = gameView.getCanvas()
+           while (NonCancellable.isActive) {
+                if(!isPaused){
+                    gameObjects.forEach {
+                        if(it.isActive) {
+                            it.render(canvas)
+                        }
+                    }
+                    //force redraw
+                    gameView.invalidate()
+                    //wait?
+                    delay(16)
+                    //delay(50)
+                    //clear screen
+                    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+                }
+
+           }
         }
     }
 
