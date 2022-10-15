@@ -9,8 +9,9 @@ import kotlin.math.sin
 private const val STROKE_WIDTH = 12f
 
 class TestCircle(id: Int) : GameObject(id) {
-    protected var posX = 300f
-    protected var posY = 500f
+    //protected var posX = 300f
+    //protected var posY = 500f
+    protected var pos = Vec2(300f,500f)
     private val drawColor = R.color.colorPaint//ResourcesCompat.getColor(resources, R.color.colorPaint, null)
     protected var paint = Paint().apply{
         color = drawColor
@@ -26,12 +27,13 @@ class TestCircle(id: Int) : GameObject(id) {
 
     override fun update(deltaT : Long){
         //Log.i("gameThread", "PosX: $posX")
-        sinProg += deltaT.toFloat()//sin(100f * deltaT.toDouble()).toFloat()
-        posX += sin(sinProg/1000f).toFloat()*10f / deltaT.toFloat()
+        sinProg += 0.1f/deltaT.toFloat()//sin(100f * deltaT.toDouble()).toFloat()
+        pos.x += sin(sinProg).toFloat()*10f / deltaT.toFloat()
     }
 
-    override fun render(canvas: Canvas) {
+    override fun render(canvas: Canvas, screenPos: Vec2) {
         //Log.i("gameThread", "PosX2: $posX")
-        canvas.drawCircle(posX,posY,150f,paint)
+        var screenPos = WorldToScreenCoordinates(pos,screenPos)
+        canvas.drawCircle(screenPos.x,screenPos.y,150f,paint)
     }
 }

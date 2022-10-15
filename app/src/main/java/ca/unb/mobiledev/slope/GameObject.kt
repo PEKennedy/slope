@@ -14,7 +14,11 @@ open class GameObject(protected val id: Int) {
         //Log.i("gameThread", "Called from object id:$id")
     }
 
-    open fun render(canvas: Canvas){
+    open fun render(canvas: Canvas, screenPos: Vec2){
         //Log.i("renderThread", "Called render obj id:$id")
+    }
+
+    protected fun WorldToScreenCoordinates(pos: Vec2, screenPos: Vec2): Vec2 {
+        return pos - screenPos
     }
 }

@@ -37,6 +37,10 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     //private val renderJob = startRenderJob()
     lateinit var renderJob: Job
 
+    //used for transforming object coordinates to on-screen coordinates
+    var screenPos = Vec2(0f,0f)
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +74,10 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         isPaused = false
     }
 
+    /*private fun WorldToScreenCoordinates(posIn: Vec2): Vec2 {
+        return posIn - screenPos
+    }*/
+
     private fun startGameJob(gameObjects: List<GameObject>): Job { //timeInterval: Long
         gameObjects.forEach {
             it.start()
@@ -81,7 +89,8 @@ class GameActivity : AppCompatActivity(), CloseHandle {
                     curTime = System.currentTimeMillis()
                     deltaT = curTime - lastTime //find time since last frame
                     lastTime = curTime
-
+                    //TODO: might be able to use deltaT with delay to make a
+                    //consistent 60fps
                     gameObjects.forEach {
                         if(it.isActive){
                             it.update(deltaT)
@@ -92,7 +101,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
                     //delay(timeInterval)
                     //delay(50)
-                    delay(16)
+                    delay(16)//-deltaT)
 
                 }
             }
@@ -110,13 +119,13 @@ class GameActivity : AppCompatActivity(), CloseHandle {
                 if(!isPaused){
                     gameObjects.forEach {
                         if(it.isActive) {
-                            it.render(canvas)
+                            it.render(canvas,screenPos)
                         }
                     }
                     //force redraw
                     gameView.invalidate()
                     //wait?
-                    delay(16)
+                    delay(10)//-deltaT)
                     //delay(50)
                     //clear screen
                     canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
