@@ -23,17 +23,28 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:gravity="center"
-            android:text="Pause Menu"
+            android:text="SETTINGS"
             android:textSize="30dp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnSettings"
+        <TextView
+            android:id="@+id/volText"
             android:layout_width="match_parent"
-            android:layout_height="86dp"
+            android:layout_height="30dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="Settings" />
+            android:gravity="center"
+            android:text="Volume:"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/volBar"
+            android:value="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp" />
 
         <Button
             android:id="@+id/btnMute"
@@ -41,7 +52,7 @@
             android:layout_height="86dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="Help" />
+            android:text="MUTE" />
 
         <Button
             android:id="@+id/btnSave"
@@ -49,7 +60,7 @@
             android:layout_height="86dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="Quit to Main menu" />
+            android:text="Save" />
 
         <Button
             android:id="@+id/btnClose"
