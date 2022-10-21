@@ -23,6 +23,9 @@ class SettingsDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFragm
 
         val sharedPref = activity?.getSharedPreferences(getString(R.string.PREF_FILE_NAME), Context.MODE_PRIVATE)
 
+        // Load settings (?)
+        sharedPref?.getFloat(getString(R.string.saved_volume_value_key), volSlider.value)
+
 //        val btnSettings = view.findViewById<Button>(R.id.btnSettings)
 //        val btnHelp = view.findViewById<Button>(R.id.btnHelp)
 //        val btnQuit = view.findViewById<Button>(R.id.btnQuit)
@@ -33,7 +36,7 @@ class SettingsDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFragm
             with (sharedPref?.edit()) {
                 this?.putFloat(getString(R.string.saved_volume_value_key), volSlider.value)
             }
-            sharedPref.apply {  }
+            sharedPref.apply { this?.all }
         }
         btnMute.setOnClickListener {
             volSlider.value = 0F;
@@ -44,4 +47,5 @@ class SettingsDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFragm
 
         return view
     }
+
 }
