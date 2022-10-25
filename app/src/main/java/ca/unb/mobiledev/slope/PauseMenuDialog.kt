@@ -5,22 +5,43 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 
 
 class PauseMenuDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFragment() {
     private val activityHandle = actHandle
+    private val settingsMenu = SettingsDialog(activityHandle);
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         val view = inflater.inflate(R.layout.pause_menu, container, false)
         val btnSettings = view.findViewById<Button>(R.id.btnSettings)
-        val btnHelp = view.findViewById<Button>(R.id.btnMute)
-        val btnQuit = view.findViewById<Button>(R.id.btnSave)
+        val btnHelp = view.findViewById<Button>(R.id.btnHelp)
+        val btnQuit = view.findViewById<Button>(R.id.btnQuit)
         val btnClose = view.findViewById<Button>(R.id.btnClose)
 
         btnSettings.setOnClickListener {
+//            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+            val nextFrag = settingsMenu
 
+            requireActivity()
+                .supportFragmentManager
+                .beginTransaction()
+                .replace(((view as ViewGroup).parent as View).id, nextFrag, "findThisFragment")
+                .commitNow()
+            this.dismiss()
+
+
+
+//            fragmentManager.beginTransaction()
+//                .replace(((view as ViewGroup).parent as View).id, nextFrag, "findThisFragment")
+//                .addToBackStack(null)
+//                .commit()
+
+//            val fragmentManager = supportFragmentManager//supportFragmentManager
+//            settingsMenu.show(fragmentManager,"settings")
         }
         btnHelp.setOnClickListener {
 

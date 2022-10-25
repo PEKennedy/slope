@@ -36,7 +36,7 @@
             android:text="Settings" />
 
         <Button
-            android:id="@+id/btnMute"
+            android:id="@+id/btnHelp"
             android:layout_width="match_parent"
             android:layout_height="86dp"
             android:layout_marginLeft="40dp"
@@ -44,7 +44,7 @@
             android:text="Help" />
 
         <Button
-            android:id="@+id/btnSave"
+            android:id="@+id/btnQuit"
             android:layout_width="match_parent"
             android:layout_height="86dp"
             android:layout_marginLeft="40dp"
