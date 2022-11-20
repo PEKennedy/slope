@@ -69,7 +69,7 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
 
     }
 
-    open fun update(deltaT : Float){
+    open fun update(deltaT : Float, objMap:Map<String,ObjectView>){
 
     }
 

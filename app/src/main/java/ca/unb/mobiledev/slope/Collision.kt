@@ -1,5 +1,6 @@
 package ca.unb.mobiledev.slope
 
+import android.util.Log
 
 
 class Collision {
@@ -17,6 +18,8 @@ class Collision {
             override fun collideBox(otherBox:BoxCollider):Boolean{
                 if(position.x < otherBox.getFarCoords().x &&
                         getFarCoords().x > otherBox.position.x){
+                //Log.i("Collider",position.toString())
+                //Log.i("Collider",otherBox.position.toString())
                     if(position.y < otherBox.getFarCoords().y &&
                         getFarCoords().y > otherBox.position.y){
                         return true

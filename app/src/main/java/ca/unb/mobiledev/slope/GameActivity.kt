@@ -11,6 +11,7 @@ import android.view.WindowInsets
 import android.widget.Button
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
+import ca.unb.mobiledev.slope.objects.Obstacle
 import ca.unb.mobiledev.slope.objects.Player
 import kotlinx.coroutines.*
 import java.util.concurrent.Executors
@@ -73,6 +74,8 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         val player = Player(applicationContext,width,height,id++)
         gameObjects += Pair("Player",player)
 
+        val obstacle = Obstacle(applicationContext,width,height,id++)
+        gameObjects += Pair("Obstacle1",obstacle)
 
         gameObjects.values.forEach {
             mFrame?.addView(it)
@@ -89,7 +92,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
             if(!isPaused){
                 gameObjects.values.forEach {
-                    it.update(deltaT)
+                    it.update(deltaT,gameObjects)
                     it.render(cameraPos)
                 }
             }
