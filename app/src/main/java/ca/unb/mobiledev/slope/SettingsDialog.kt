@@ -10,9 +10,7 @@ import android.widget.Button
 import com.google.android.material.slider.Slider
 
 
-class SettingsDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFragment() {
-    private val activityHandle = actHandle
-    //private val pauseMenu = PauseMenuDialog(activityHandle);
+class SettingsDialog : androidx.fragment.app.DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

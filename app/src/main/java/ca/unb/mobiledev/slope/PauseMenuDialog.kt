@@ -11,7 +11,8 @@ import androidx.fragment.app.FragmentTransaction
 
 class PauseMenuDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFragment() {
     private val activityHandle = actHandle
-    private val settingsMenu = SettingsDialog(activityHandle);
+    private val settingsMenu = SettingsDialog();
+    private val helpMenu = HelpDialog()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -47,7 +48,8 @@ class PauseMenuDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFrag
 //            settingsMenu.show(fragmentManager,"settings")
         }
         btnHelp.setOnClickListener {
-
+            val nextFrag = helpMenu
+            nextFrag.show(parentFragmentManager,"helpFragment")
         }
         btnQuit.setOnClickListener {
             activityHandle.close()

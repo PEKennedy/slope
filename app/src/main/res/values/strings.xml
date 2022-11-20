@@ -15,4 +15,11 @@
     <string name="settings_no_caps">Settings</string>
     <string name="help">Help</string>
     <string name="quit_to_main_menu">Quit to Main menu</string>
+    <string name="help_description">
+        Welcome to the slope game.\n\n
+        Tilt the phone left and right to control your speed.\n\n
+        Flick your phone up to jump.\n\n
+        Try to go as far as you can without hitting an obstacle.\n\n
+        Good Luck!
+    </string>
 </resources>

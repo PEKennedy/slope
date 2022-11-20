@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.WindowInsets
 import android.widget.Button
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ca.unb.mobiledev.slope.objects.Obstacle
 import ca.unb.mobiledev.slope.objects.Player
@@ -27,6 +28,7 @@ interface CloseHandle {
 class GameActivity : AppCompatActivity(), CloseHandle {
 
     private var mFrame: RelativeLayout? = null
+    private lateinit var distText:TextView
 
     private val pauseMenu = PauseMenuDialog(this)
 
@@ -58,10 +60,16 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         }
         mFrame = findViewById(R.id.frame) //relativeLayout
 
+        distText = findViewById(R.id.distance)
+        distText.text = "testing"
         //actionBar?.hide()
 
         startGame()
 
+    }
+
+    private fun setDistanceText(dist:Int){
+        distText.text = dist.toString() + "m"
     }
 
     private fun startGame(){
@@ -97,6 +105,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
                     it.update(deltaT,gameObjects)
                     it.render(cameraPos)
                 }
+                setDistanceText((player.position.x/100f).toInt())
             }
 
 
