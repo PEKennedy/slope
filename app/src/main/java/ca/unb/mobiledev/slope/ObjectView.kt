@@ -15,11 +15,9 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
 
     protected open val defaultBitmap = R.drawable.b64
 
-    // Display dimensions
-    //private var mStepX: Int
-   // private var mStepY: Int
     private val mPainter = Paint()
 
+    // Display dimensions
     private val mDisplayWidth: Int = displayWidth
     private val mDisplayHeight: Int = displayHeight
 
@@ -69,25 +67,15 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
         // Smooth out the edges
         //mPainter.isAntiAlias = true
 
-        //setBitmap
-        /*if(bitmap != -1){
-            setBitmap()//bitmap)
-        }*/
     }
 
     open fun update(deltaT : Float){
-        //Log.i("gameThread", "Called from object id:$id")
-       // Log.i("Obj2",deltaT.toString())
-        //position += Vec2(0f, 100f)*deltaT
-        //Log.i("Obj2",position.toString())
+
     }
 
-    open fun render(){//canvas: Canvas, screenPos: Vec2){
-        //Log.i("renderThread", "Called render obj id:$id")
+    open fun render(camera:Vec2=Vec2(0f,0f)){//canvas: Canvas, screenPos: Vec2){
         if(hasBitmap){
-           // Log.i("Obj",position.toString())
-            setScreenPos(Vec2(0f,0f))
-            //screenPos += Vec2(0f,1f)
+            setScreenPos(camera)
             if (isOnScreen()) {
                 this@ObjectView.postInvalidate()
             }

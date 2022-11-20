@@ -39,9 +39,10 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     private val REFRESH_RATE = 16
 
     //used for transforming object coordinates to on-screen coordinates
-    var screenPos = Vec2(0f,0f)
+    var cameraPos = Vec2(0f,0f)
 
-    var gameObjects = arrayOf<ObjectView>()
+    //use a map so its easy to find objects
+    var gameObjects = mapOf<String,ObjectView>()
 
     // Reference to the thread job
     private var mMoverFuture: ScheduledFuture<*>? = null
@@ -56,12 +57,50 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         }
         mFrame = findViewById(R.id.frame) //relativeLayout
 
+        startGame()
+
     }
+
+    private fun startGame(){
+        // Determine the screen size
+        val (width, height) = getScreenDimensions(this)
+
+        //foreach object
+        val x = ObjectView(applicationContext,width,height,id++)
+        x.setBitmap()
+        gameObjects += Pair("test",x)
+
+        val player = Player(applicationContext,width,height,id++)
+        gameObjects += Pair("Player",player)
+
+
+        gameObjects.values.forEach {
+            mFrame?.addView(it)
+            it.start()
+        }
+
+        // Creates a WorkerThread
+        val executor = Executors.newScheduledThreadPool(1)
+
+        mMoverFuture = executor.scheduleWithFixedDelay({
+            curTime = lastTime
+            lastTime = System.currentTimeMillis()
+            deltaT = (lastTime-curTime).toFloat()/1000f
+
+            if(!isPaused){
+                gameObjects.values.forEach {
+                    it.update(deltaT)
+                    it.render(cameraPos)
+                }
+            }
+
+
+        }, 0, REFRESH_RATE.toLong(), TimeUnit.MILLISECONDS)
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
-        //gameJob.cancel()
-        //renderJob.cancel()
     }
 
     private fun pause(){
@@ -80,41 +119,8 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            // Determine the screen size
-            val (width, height) = getScreenDimensions(this)
+        if (!hasFocus) isPaused = true
 
-            //foreach object
-            val x = ObjectView(applicationContext,width,height,id++)
-            x.setBitmap()
-            gameObjects += x
-
-            val player = Player(applicationContext,width,height,id++)
-            gameObjects += player
-
-            
-
-            gameObjects.forEach {
-                mFrame?.addView(it)
-                it.start()
-            }
-
-            // Creates a WorkerThread
-            val executor = Executors.newScheduledThreadPool(1)
-
-            mMoverFuture = executor.scheduleWithFixedDelay({
-                curTime = lastTime
-                lastTime = System.currentTimeMillis()
-                deltaT = (lastTime-curTime).toFloat()/1000f
-                Log.i("activity",deltaT.toString())
-
-                gameObjects.forEach {
-                    it.update(deltaT)
-                    it.render()
-                }
-
-            }, 0, REFRESH_RATE.toLong(), TimeUnit.MILLISECONDS)
-        }
     }
 
     private fun getScreenDimensions(activity: Activity): Pair<Int, Int> {
