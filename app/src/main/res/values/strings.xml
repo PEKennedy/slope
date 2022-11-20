@@ -22,4 +22,7 @@
         Try to go as far as you can without hitting an obstacle.\n\n
         Good Luck!
     </string>
+    <string name="game_over">Game Over</string>
+    <string name="your_score_was">Your Score Was:</string>
+    <string name="try_again">Try Again</string>
 </resources>

@@ -1,87 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.Slope"
-    >
-    <!--android:layout_width="wrap_content"
-    android:layout_height="wrap_content"-->
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <!--android:layout_width="300dp"
-    android:layout_height="440dp"-->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#A3D6FF"
         android:gravity="center"
         android:orientation="vertical"
-        android:theme="@style/Theme.Slope"
         app:circularflow_radiusInDP="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498">
-
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/gameover_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/settings"
+            android:text="@string/game_over"
             android:textColor="#0277BD"
             android:textSize="30sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/volText"
+            android:id="@+id/score_text"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/volume"
+            android:text="@string/your_score_was"
             android:textColor="#0277BD"
-            android:textSize="20sp"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/volBar"
-            android:layout_width="258dp"
+        <Button
+            android:id="@+id/btnTryAgain"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:theme="@style/Theme.Slider" />
+            android:text="@string/try_again" />
 
         <Button
-            android:id="@+id/btnMute"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnQuit"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="@string/mute" />
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:text="@string/save" />
-
-        <Button
-            android:id="@+id/btnClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:text="@string/close" />
+            android:text="@string/quit_to_main_menu" />
 
 
     </LinearLayout>

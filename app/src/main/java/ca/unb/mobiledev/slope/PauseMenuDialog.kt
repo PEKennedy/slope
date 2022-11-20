@@ -1,5 +1,6 @@
 package ca.unb.mobiledev.slope
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -60,5 +61,10 @@ class PauseMenuDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFrag
         }
 
         return view
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        activityHandle.unPause()
+        super.onCancel(dialog)
     }
 }

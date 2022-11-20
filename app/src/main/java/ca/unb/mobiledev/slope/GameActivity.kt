@@ -1,12 +1,8 @@
 package ca.unb.mobiledev.slope
 
 import android.app.Activity
-import android.graphics.Color
 import android.graphics.Point
-import android.graphics.PorterDuff
-import android.os.Build
-import android.os.Bundle
-import android.util.Log
+import android.os.*
 import android.view.WindowInsets
 import android.widget.Button
 import android.widget.RelativeLayout
@@ -14,7 +10,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import ca.unb.mobiledev.slope.objects.Obstacle
 import ca.unb.mobiledev.slope.objects.Player
-import kotlinx.coroutines.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -31,6 +26,9 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     private lateinit var distText:TextView
 
     private val pauseMenu = PauseMenuDialog(this)
+
+
+
 
     private var id = 0
 
@@ -50,6 +48,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     // Reference to the thread job
     private var mMoverFuture: ScheduledFuture<*>? = null
 
+    var distance = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,9 +67,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
     }
 
-    private fun setDistanceText(dist:Int){
-        distText.text = dist.toString() + "m"
-    }
+
 
     private fun startGame(){
         // Determine the screen size
@@ -81,7 +78,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         x.setBitmap()
         gameObjects += Pair("test",x)
 
-        val player = Player(applicationContext,width,height,id++)
+        val player = Player(applicationContext,width,height,id++,this)
         gameObjects += Pair("Player",player)
 
         val obstacle = Obstacle(applicationContext,width,height,id++)
@@ -105,20 +102,42 @@ class GameActivity : AppCompatActivity(), CloseHandle {
                     it.update(deltaT,gameObjects)
                     it.render(cameraPos)
                 }
-                setDistanceText((player.position.x/100f).toInt())
+
+                /*val mainThreadLooper = Looper.getMainLooper() // --> Looper of the main/UI thread
+                val mainThreadHandler = Handler(mainThreadLooper) // --> Get handler to main thread
+                val messageToSendToMainThread =
+                    Message.obtain() // --> Create a message to send to UI thread
+                messageToSendToMainThread.obj = (player.position.x/100f).toInt()//123 // 123 -> actual msg value
+                mainThreadHandler.sendMessage(messageToSendToMainThread)*/
+
+                runOnUiThread {
+                   setDistanceText((player.position.y/100f).toInt())
+                    if(player.hitObstacle){
+                        gameOver()
+                    }
+                }
+
+                //setDistanceText((player.position.x/100f).toInt())
             }
 
 
         }, 0, REFRESH_RATE.toLong(), TimeUnit.MILLISECONDS)
     }
 
+    fun gameOver(){
+        val gameOverMenu = GameOverMenuDialog(this,distance)
+        //gameOverMenu.setScoreText(distance)//.distance = distance
+        gameOverMenu.show(supportFragmentManager,"game_over_menu")
+        gameOverMenu.isCancelable = false
+        isPaused = true
+    }
 
     override fun onDestroy() {
         super.onDestroy()
     }
 
     private fun pause(){
-        val fragmentManager = supportFragmentManager//supportFragmentManager
+        val fragmentManager = supportFragmentManager
         pauseMenu.show(fragmentManager,"pause_menu")
         isPaused = true
     }
@@ -129,6 +148,11 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
     override fun unPause() {
         isPaused = false
+    }
+
+    private fun setDistanceText(dist:Int){
+        distance = dist
+        distText.text = dist.toString() + "m"
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

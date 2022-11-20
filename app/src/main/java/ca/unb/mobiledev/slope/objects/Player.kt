@@ -3,11 +3,12 @@ package ca.unb.mobiledev.slope.objects
 import android.content.Context
 import android.util.Log
 import ca.unb.mobiledev.slope.Collision
+import ca.unb.mobiledev.slope.GameActivity
 import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.Vec2
 import ca.unb.mobiledev.slope.R.drawable.skifrog as texture
 
-class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int)
+class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int,val activity: GameActivity)
     :ObjectView(context,displayWidth,displayHeight,objId) {
 
     override val defaultBitmap = texture
@@ -18,7 +19,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
     var extents = Vec2(50f,50f)
     var collider = Collision.Companion.BoxCollider(position,extents)
 
-
+    var hitObstacle = false
 
     override fun start(){
         setBitmap()
@@ -31,7 +32,9 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             val collide = collider.collideBox(obstacle.collider)
             //Log.i("Player",collide.toString())
             if(collide){
-
+                //gameOver
+                //activity.gameOver()
+                hitObstacle = true
             }
             else{
                 position += velocity*deltaT
