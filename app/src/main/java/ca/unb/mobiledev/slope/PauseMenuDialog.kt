@@ -26,13 +26,16 @@ class PauseMenuDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFrag
 //            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
             val nextFrag = settingsMenu
 
-            requireActivity()
+            nextFrag.show(parentFragmentManager,"SettingsFragment")
+
+           /* requireActivity()
                 .supportFragmentManager
                 .beginTransaction()
-                .replace(((view as ViewGroup).parent as View).id, nextFrag, "findThisFragment")
-                .commitNow()
-            this.dismiss()
-
+                .addToBackStack("findThisFragment")
+                //.replace(((view as ViewGroup).parent as View).id, nextFrag, "findThisFragment")
+                //.addToBackStack("pause_menu")
+                .commitNow()*/
+            //this.dismiss()
 
 
 //            fragmentManager.beginTransaction()

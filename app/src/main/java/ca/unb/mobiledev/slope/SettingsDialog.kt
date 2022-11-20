@@ -12,6 +12,8 @@ import com.google.android.material.slider.Slider
 
 class SettingsDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFragment() {
     private val activityHandle = actHandle
+    //private val pauseMenu = PauseMenuDialog(activityHandle);
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -44,7 +46,7 @@ class SettingsDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFragm
             Log.i("Storage:", "Stored value is: " + sharedPref.getFloat(volSave, 1F))
         }
         btnClose.setOnClickListener {
-            activityHandle.unPause()
+            //activityHandle.unPause()
             this.dismiss()
         }
 
