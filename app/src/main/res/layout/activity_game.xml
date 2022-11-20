@@ -19,17 +19,21 @@
     android:layout_height="fill_parent"
     android:background="#FF444444"
     android:id="@+id/frame"
-    android:layout_alignParentTop="true">
+    android:layout_alignParentTop="true"
+    android:theme="@style/Theme.Slope">
 
     <Button
         android:id="@+id/btnPause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="156dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="313dp"
+        android:layout_marginEnd="330dp"
         android:layout_marginBottom="28dp"
-        android:text="Pause"/>
-        <!--app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"-->
+        android:text="@string/pause" />
+    <!--app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"-->
 </RelativeLayout>
 
 <!--

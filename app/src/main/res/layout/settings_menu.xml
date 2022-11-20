@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:theme="@style/Theme.Slope"
+    >
+    <!--android:layout_width="wrap_content"
+    android:layout_height="wrap_content"-->
 
+
+    <!--android:layout_width="300dp"
+    android:layout_height="440dp"-->
     <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="440dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="#A3D6FF"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
+        android:theme="@style/Theme.Slope"
         app:circularflow_radiusInDP="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498">
+
 
         <TextView
             android:id="@+id/pause_text"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="SETTINGS"
-            android:textSize="30dp"
+            android:text="@string/settings"
+            android:textColor="#0277BD"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
         <TextView
@@ -34,40 +46,42 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:gravity="center"
-            android:text="Volume:"
-            android:textSize="20dp"
+            android:text="@string/volume"
+            android:textColor="#0277BD"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <com.google.android.material.slider.Slider
             android:id="@+id/volBar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="258dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp" />
+            android:layout_marginRight="40dp"
+            android:theme="@style/Theme.Slider" />
 
         <Button
             android:id="@+id/btnMute"
-            android:layout_width="match_parent"
-            android:layout_height="86dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="MUTE" />
+            android:text="@string/mute" />
 
         <Button
             android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="86dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="Save" />
+            android:text="@string/save" />
 
         <Button
             android:id="@+id/btnClose"
-            android:layout_width="match_parent"
-            android:layout_height="86dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="Close" />
+            android:text="@string/close" />
 
 
     </LinearLayout>

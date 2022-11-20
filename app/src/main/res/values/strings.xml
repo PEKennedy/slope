@@ -3,4 +3,16 @@
     <string name="PREF_FILE_NAME">ca.unb.mobiledev.SLOPE_SAVE</string>
     <string name="saved_volume_value_key">volume_val</string>
     <string name="HIGH_SCORE">high_score_val</string>
+    <string name="play">Play</string>
+    <string name="welcome_to_slope_game">Welcome To Slope Game</string>
+    <string name="settings">SETTINGS</string>
+    <string name="volume">Volume:</string>
+    <string name="mute">MUTE</string>
+    <string name="save">Save</string>
+    <string name="close">Close</string>
+    <string name="pause">Pause</string>
+    <string name="pause_menu">Pause Menu</string>
+    <string name="settings_no_caps">Settings</string>
+    <string name="help">Help</string>
+    <string name="quit_to_main_menu">Quit to Main menu</string>
 </resources>

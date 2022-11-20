@@ -7,11 +7,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="440dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="#A3D6FF"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         app:circularflow_radiusInDP="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,43 +21,44 @@
         <TextView
             android:id="@+id/pause_text"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Pause Menu"
-            android:textSize="30dp"
+            android:text="@string/pause_menu"
+            android:textColor="#0277BD"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnSettings"
             android:layout_width="match_parent"
-            android:layout_height="86dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="Settings" />
+            android:text="@string/settings_no_caps" />
 
         <Button
             android:id="@+id/btnHelp"
             android:layout_width="match_parent"
-            android:layout_height="86dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="Help" />
+            android:text="@string/help" />
 
         <Button
             android:id="@+id/btnQuit"
             android:layout_width="match_parent"
-            android:layout_height="86dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="Quit to Main menu" />
+            android:text="@string/quit_to_main_menu" />
 
         <Button
             android:id="@+id/btnClose"
             android:layout_width="match_parent"
-            android:layout_height="86dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:text="Close" />
+            android:text="@string/close" />
 
 
     </LinearLayout>

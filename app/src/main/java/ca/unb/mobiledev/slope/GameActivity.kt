@@ -58,6 +58,8 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         }
         mFrame = findViewById(R.id.frame) //relativeLayout
 
+        //actionBar?.hide()
+
         startGame()
 
     }
