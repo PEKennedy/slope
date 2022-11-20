@@ -1,17 +1,9 @@
-package ca.unb.mobiledev.slope
+package ca.unb.mobiledev.slope.old
 
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.util.Log
-import androidx.core.content.res.ResourcesCompat
-import kotlin.math.sin
-
-private const val STROKE_WIDTH = 12f
-
-class TestCircle(id: Int) : GameObject(id) {
+class textureObj(id: Int) : GameObject(id) {
     //protected var posX = 300f
     //protected var posY = 500f
-    protected var pos = Vec2(300f,500f)
+   /* protected var pos = Vec2(300f,500f)
     private val drawColor = R.color.colorPaint//ResourcesCompat.getColor(resources, R.color.colorPaint, null)
     protected var paint = Paint().apply{
         color = drawColor
@@ -25,6 +17,22 @@ class TestCircle(id: Int) : GameObject(id) {
 
     protected var sinProg = 0f
 
+
+    companion object {
+        private const val BITMAP_SIZE = 64
+        private const val MAX_STEP = 10
+        private const val REFRESH_RATE = 40
+    }
+    //private var scaledBitmap: Bitmap
+
+
+
+    override fun start() {
+        super.start()
+        //val bitmap = BitmapFactory.decodeResource(resources, R.drawable.b64)
+        //scaledBitmap = Bitmap.createScaledBitmap(bitmap, BITMAP_SIZE, BITMAP_SIZE,false)
+    }
+
     override fun update(deltaT : Long){
         //Log.i("gameThread", "PosX: $posX")
         sinProg += 0.1f/deltaT.toFloat()//sin(100f * deltaT.toDouble()).toFloat()
@@ -35,5 +43,5 @@ class TestCircle(id: Int) : GameObject(id) {
         //Log.i("gameThread", "PosX2: $posX")
         var screenPos = WorldToScreenCoordinates(pos,screenPos)
         canvas.drawCircle(screenPos.x,screenPos.y,150f,paint)
-    }
+    }*/
 }

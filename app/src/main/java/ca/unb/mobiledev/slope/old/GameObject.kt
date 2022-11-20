@@ -1,7 +1,7 @@
-package ca.unb.mobiledev.slope
+package ca.unb.mobiledev.slope.old
 
 import android.graphics.Canvas
-import android.util.Log
+import ca.unb.mobiledev.slope.Vec2
 
 open class GameObject(protected val id: Int) {
     val isActive = true

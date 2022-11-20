@@ -1,11 +1,21 @@
 package ca.unb.mobiledev.slope
 
+import android.app.Activity
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.WindowInsets
 import android.widget.Button
+import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
+import ca.unb.mobiledev.slope.objects.Player
 import kotlinx.coroutines.*
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 
 interface CloseHandle {
@@ -15,31 +25,26 @@ interface CloseHandle {
 
 class GameActivity : AppCompatActivity(), CloseHandle {
 
+    private var mFrame: RelativeLayout? = null
+
     private val pauseMenu = PauseMenuDialog(this)
-    //private val gameView = findViewById<GameView>(R.id.canvas)
 
     private var id = 0
 
-
-
     private var lastTime = System.currentTimeMillis()
     private var curTime = lastTime
-    private var deltaT = 0L
+    private var deltaT = 0f
 
     private var isPaused = false
-
-    val testObj = GameObject(id++)
-    val testObj2 = GameObject(id++)
-    val testObj3 = TestCircle(id++)
-    val gameObjects = listOf<GameObject>(testObj, testObj2, testObj3)
-
-    val gameJob = startGameJob(gameObjects) //keep this after gameObjects list
-    //private val renderJob = startRenderJob()
-    lateinit var renderJob: Job
+    private val REFRESH_RATE = 16
 
     //used for transforming object coordinates to on-screen coordinates
     var screenPos = Vec2(0f,0f)
 
+    var gameObjects = arrayOf<ObjectView>()
+
+    // Reference to the thread job
+    private var mMoverFuture: ScheduledFuture<*>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,15 +54,14 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         btnPause.setOnClickListener {
             pause()
         }
-        //these used to be private vars outside onCreate
-        val gameView = findViewById<GameView>(R.id.canvas)
-        renderJob = startRenderJob(gameView, gameObjects)
+        mFrame = findViewById(R.id.frame) //relativeLayout
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        gameJob.cancel()
-        renderJob.cancel()
+        //gameJob.cancel()
+        //renderJob.cancel()
     }
 
     private fun pause(){
@@ -74,66 +78,65 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         isPaused = false
     }
 
-    /*private fun WorldToScreenCoordinates(posIn: Vec2): Vec2 {
-        return posIn - screenPos
-    }*/
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            // Determine the screen size
+            val (width, height) = getScreenDimensions(this)
 
-    private fun startGameJob(gameObjects: List<GameObject>): Job { //timeInterval: Long
-        gameObjects.forEach {
-            it.start()
-        }
+            //foreach object
+            val x = ObjectView(applicationContext,width,height,id++)
+            x.setBitmap()
+            gameObjects += x
 
-        return CoroutineScope(Dispatchers.Default).launch{
-            while(NonCancellable.isActive){
-                if(!isPaused){ //don't know of a way to "pause" the thread, so its going to just keep running
-                    curTime = System.currentTimeMillis()
-                    deltaT = curTime - lastTime //find time since last frame
-                    lastTime = curTime
-                    //TODO: might be able to use deltaT with delay to make a
-                    //consistent 60fps
-                    gameObjects.forEach {
-                        if(it.isActive){
-                            it.update(deltaT)
-                            //it.render(gameView)
-                            //it.render()
-                        }
-                    }
+            val player = Player(applicationContext,width,height,id++)
+            gameObjects += player
 
-                    //delay(timeInterval)
-                    //delay(50)
-                    delay(16)//-deltaT)
+            
 
-                }
+            gameObjects.forEach {
+                mFrame?.addView(it)
+                it.start()
             }
-        }
-    }
 
-   private fun startRenderJob(gameView: GameView, gameObjects: List<GameObject>): Job {
+            // Creates a WorkerThread
+            val executor = Executors.newScheduledThreadPool(1)
 
-       return CoroutineScope(Dispatchers.Default).launch {
-           while(!gameView.isCanvasInit()){
-               delay(1)
-           }
-           val canvas = gameView.getCanvas()
-           while (NonCancellable.isActive) {
-                if(!isPaused){
-                    gameObjects.forEach {
-                        if(it.isActive) {
-                            it.render(canvas,screenPos)
-                        }
-                    }
-                    //force redraw
-                    gameView.invalidate()
-                    //wait?
-                    delay(10)//-deltaT)
-                    //delay(50)
-                    //clear screen
-                    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+            mMoverFuture = executor.scheduleWithFixedDelay({
+                curTime = lastTime
+                lastTime = System.currentTimeMillis()
+                deltaT = (lastTime-curTime).toFloat()/1000f
+                Log.i("activity",deltaT.toString())
+
+                gameObjects.forEach {
+                    it.update(deltaT)
+                    it.render()
                 }
 
-           }
+            }, 0, REFRESH_RATE.toLong(), TimeUnit.MILLISECONDS)
         }
     }
 
+    private fun getScreenDimensions(activity: Activity): Pair<Int, Int> {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics = activity.windowManager.currentWindowMetrics
+            val windowInsets: WindowInsets = windowMetrics.windowInsets
+            val insets = windowInsets.getInsetsIgnoringVisibility(
+                WindowInsets.Type.navigationBars() or WindowInsets.Type.displayCutout())
+
+            val insetsWidth = insets.right + insets.left
+            val insetsHeight = insets.top + insets.bottom
+
+            val b = windowMetrics.bounds
+            Pair(b.width() - insetsWidth, b.height() - insetsHeight)
+        } else {
+            val size = Point()
+            @Suppress("DEPRECATION")
+            val display = activity.windowManager.defaultDisplay // deprecated in API 30
+            @Suppress("DEPRECATION")
+            display?.getSize(size) // deprecated in API 30
+            Pair(size.x, size.y)
+        }
+    }
 
 }

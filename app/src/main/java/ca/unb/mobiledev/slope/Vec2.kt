@@ -32,6 +32,11 @@ class Vec2(var x :Float, var y:Float) {
     fun normalized():Vec2{
         return Vec2(x/this.length(),y/this.length())
     }
+
+    override fun toString(): String {
+        return "{$x,$y}"
+    }
+
     /*fun getX():Float{
         return x
     }*/

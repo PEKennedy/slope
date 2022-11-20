@@ -1,12 +1,12 @@
-package ca.unb.mobiledev.slope
+package ca.unb.mobiledev.slope.old
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import ca.unb.mobiledev.slope.R
 
 class GameView (context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
     private lateinit var extraCanvas: Canvas
