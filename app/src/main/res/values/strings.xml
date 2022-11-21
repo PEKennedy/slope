@@ -25,4 +25,8 @@
     <string name="game_over">Game Over</string>
     <string name="your_score_was">Your Score Was:</string>
     <string name="try_again">Try Again</string>
+    <string name="your_last_score">Your Last Score:</string>
+    <string name="your_best_high_score">Your Best Score:</string>
+    <string name="new_high_score">New High Score!</string>
+    <string name="clear_save">Clear Save Data</string>
 </resources>

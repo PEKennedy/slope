@@ -7,6 +7,16 @@
     tools:context=".MainMenuActivity"
     android:theme="@style/Theme.Slope">
 
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="132dp"
+        android:layout_marginBottom="224dp"
+        android:text="@string/clear_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

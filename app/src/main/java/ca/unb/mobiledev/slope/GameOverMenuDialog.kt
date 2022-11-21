@@ -1,5 +1,6 @@
 package ca.unb.mobiledev.slope
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,7 @@ import androidx.fragment.app.FragmentTransaction
 import org.w3c.dom.Text
 
 
-class GameOverMenuDialog(actHandle: CloseHandle, val distance:Int) : androidx.fragment.app.DialogFragment() {
+class GameOverMenuDialog(actHandle: GameActivity, val distance:Int) : androidx.fragment.app.DialogFragment() {
 
     private val activityHandle = actHandle
 
@@ -28,10 +29,15 @@ class GameOverMenuDialog(actHandle: CloseHandle, val distance:Int) : androidx.fr
 
         val btnTryAgain = view.findViewById<Button>(R.id.btnTryAgain)
         val btnQuit = view.findViewById<Button>(R.id.btnQuit)
+
         val textScore = view.findViewById<TextView>(R.id.score_text)
+        val lastScore = view.findViewById<TextView>(R.id.last_score_text)
+        val highScore = view.findViewById<TextView>(R.id.best_score_text)
+        val newHighScore = view.findViewById<TextView>(R.id.new_high_score_text)
 
         btnTryAgain.setOnClickListener {
             //TODO: Need to do something to reset the game here
+            activityHandle.startGame()
             activityHandle.unPause()
             this.dismiss()
         }
@@ -39,8 +45,26 @@ class GameOverMenuDialog(actHandle: CloseHandle, val distance:Int) : androidx.fr
             activityHandle.close()
             this.dismiss()
         }
-        textScore.text = "Your Score Was: " + distance.toString() + "m"
-        
+
+        val sharedPref = requireActivity().getSharedPreferences(getString(R.string.PREF_FILE_NAME), Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+
+        val highestDist = sharedPref.getInt("Highest_dist",0)
+        val lastDist = sharedPref.getInt("Last_dist",0)
+
+        if(distance > highestDist){
+            editor.putInt("Highest_dist",distance)
+        }
+        else{
+            newHighScore.visibility = View.GONE
+        }
+        editor.putInt("Last_dist",distance)
+        editor.commit()
+
+
+        textScore.text = "Your Score Was:  " + distance.toString() + "m"
+        lastScore.text = "Your Last Score: " + lastDist.toString() + "m"
+        highScore.text = "Your Best Score: " + highestDist.toString() + "m"
 
         return view
     }

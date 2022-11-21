@@ -29,14 +29,45 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/new_high_score_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="1"
+            android:gravity="center"
+            android:text="@string/new_high_score"
+            android:textColor="#0277BD"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/score_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/your_score_was"
             android:textColor="#0277BD"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/last_score_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/your_last_score"
+            android:textColor="#0277BD"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/best_score_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/your_best_high_score"
+            android:textColor="#0277BD"
+            android:textSize="16sp"
+            />
 
         <Button
             android:id="@+id/btnTryAgain"

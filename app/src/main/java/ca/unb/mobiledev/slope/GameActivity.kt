@@ -69,7 +69,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
 
 
-    private fun startGame(){
+    fun startGame(){
         // Determine the screen size
         val (width, height) = getScreenDimensions(this)
 
