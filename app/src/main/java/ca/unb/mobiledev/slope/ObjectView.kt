@@ -22,7 +22,7 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
     private val mDisplayHeight: Int = displayHeight
 
     private var screenPos = Vec2(0f,0f)
-    var position = Vec2(displayWidth / 2.0f,displayHeight / 2.0f)
+    var position = Vec2(0f,0f)//Vec2(displayWidth / 2.0f,displayHeight / 2.0f)
 
     // Reference to the scaled bitmap object
     private lateinit var scaledBitmap: Bitmap

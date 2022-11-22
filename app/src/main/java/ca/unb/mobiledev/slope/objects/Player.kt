@@ -16,7 +16,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
     var velocity = Vec2(0f,0.0f)
     val gravity = 9.81f
 
-    var extents = Vec2(50f,50f)
+    var extents = Vec2(64f,64f)
     var collider = Collision.Companion.BoxCollider(position,extents)
 
     var hitObstacle = false
@@ -33,16 +33,15 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             //Log.i("Player",collide.toString())
             if(collide){
                 //gameOver
-                //activity.gameOver()
-                hitObstacle = true
+                hitObstacle = true //UI is checking for this, and calls gameover once it sees it
             }
             else{
-                position += velocity*deltaT
+                position += velocity*deltaT //physics
                 velocity.y += gravity
             }
         }
         collider.position = position
-        //if(collider.collideBox(
+
 
     }
 
