@@ -17,7 +17,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
     val gravity = 9.81f
 
     var extents = Vec2(64f,64f)
-    var collider = Collision.Companion.BoxCollider(position,extents)
+    var collider = Collision.BoxCollider(position,extents)
 
     var hitObstacle = false
 

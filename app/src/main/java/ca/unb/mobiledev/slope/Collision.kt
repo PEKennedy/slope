@@ -4,7 +4,7 @@ import android.util.Log
 
 
 class Collision {
-    companion object{
+    //companion object{
         interface Collider {
             fun collideBox(otherBox:BoxCollider):Boolean
         }
@@ -39,5 +39,5 @@ class Collision {
 
             //fun collideSlope()
         }
-    }
+    //}
 }

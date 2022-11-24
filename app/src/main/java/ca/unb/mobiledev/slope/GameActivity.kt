@@ -8,8 +8,7 @@ import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import ca.unb.mobiledev.slope.objects.Obstacle
-import ca.unb.mobiledev.slope.objects.Player
+import ca.unb.mobiledev.slope.objects.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -73,16 +72,26 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         // Determine the screen size
         val (width, height) = getScreenDimensions(this)
 
+        //Reset the game state
+        gameObjects = mapOf<String,ObjectView>()
+        mFrame?.removeAllViews()
+        lastTime = System.currentTimeMillis()
+        id = 0
+        mMoverFuture = null
+
         //foreach object
-        val x = ObjectView(applicationContext,width,height,id++)
-        x.setBitmap()
-        gameObjects += Pair("test",x)
+        //val x = ObjectView(applicationContext,width,height,id++)
+        //x.setBitmap()
+        //gameObjects += Pair("test",x)
 
         val player = Player(applicationContext,width,height,id++,this)
         gameObjects += Pair("Player",player)
 
         val obstacle = Obstacle(applicationContext,width,height,id++)
         gameObjects += Pair("Obstacle1",obstacle)
+
+        val terrain = Terrain(applicationContext,width,height,id++)
+        gameObjects += Pair("Terrain",terrain)
 
         gameObjects.values.forEach {
             mFrame?.addView(it)
@@ -103,21 +112,12 @@ class GameActivity : AppCompatActivity(), CloseHandle {
                     it.render(cameraPos)
                 }
 
-                /*val mainThreadLooper = Looper.getMainLooper() // --> Looper of the main/UI thread
-                val mainThreadHandler = Handler(mainThreadLooper) // --> Get handler to main thread
-                val messageToSendToMainThread =
-                    Message.obtain() // --> Create a message to send to UI thread
-                messageToSendToMainThread.obj = (player.position.x/100f).toInt()//123 // 123 -> actual msg value
-                mainThreadHandler.sendMessage(messageToSendToMainThread)*/
-
                 runOnUiThread {
                    setDistanceText((player.position.y/100f).toInt())
                     if(player.hitObstacle){
                         gameOver()
                     }
                 }
-
-                //setDistanceText((player.position.x/100f).toInt())
             }
 
 
@@ -126,7 +126,6 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
     fun gameOver(){
         val gameOverMenu = GameOverMenuDialog(this,distance)
-        //gameOverMenu.setScoreText(distance)//.distance = distance
         gameOverMenu.show(supportFragmentManager,"game_over_menu")
         gameOverMenu.isCancelable = false
         isPaused = true
@@ -141,6 +140,8 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         pauseMenu.show(fragmentManager,"pause_menu")
         isPaused = true
     }
+
+    //onPause, onResume >> try to suspend things to conserve battery
 
     override fun close() {
         finish()

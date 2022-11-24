@@ -13,13 +13,13 @@ class Obstacle(context: Context?, displayWidth: Int, displayHeight: Int, objId: 
     override val defaultBitmap = texture
 
     var extents = Vec2(32f,32f)
-    var collider = Collision.Companion.BoxCollider(position,extents)
+    var collider = Collision.BoxCollider(position,extents)
 
 
 
     override fun start(){
         setBitmap()
-        position += Vec2(0f,300f)
+        position += Vec2(100f,300f)
         collider.position = position-Vec2(0f,100f)
     }
 
