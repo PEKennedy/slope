@@ -23,24 +23,49 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
 
     override fun start(){
         setBitmap()
+        //500,200 vs 200,300  //450
+        position += Vec2(450f,200f)
     }
 
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
 
         val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
+        val terrain:Terrain = objMap["Terrain"] as Terrain
+
+        //position = terrain.playerCollide(position)
+
         if(obstacle != null){
             val collide = collider.collideBox(obstacle.collider)
             //Log.i("Player",collide.toString())
             if(collide){
                 //gameOver
                 hitObstacle = true //UI is checking for this, and calls gameover once it sees it
+                velocity.y = 0F
             }
             else{
                 position += velocity*deltaT //physics
                 velocity.y += gravity
             }
         }
+
+        if(terrain != null){
+            //val offsetPos = position //+ Vec2(32f,64f)
+            val collided = terrain.checkPlayerCollide(position)
+
+            //would probably want to lerp this
+            objRotation = terrain.getPlayerAngle(position)
+
+            if(collided){
+                //Log.i("COLLISION",collided.toString())
+                //position = terrain.playerCollide(position) - Vec2(0f,10f)
+                position = terrain.playerCollide(position)
+                velocity.y = 0F
+            }
+        }
+
+
         collider.position = position
+
 
 
     }

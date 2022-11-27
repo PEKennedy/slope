@@ -84,14 +84,18 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         //x.setBitmap()
         //gameObjects += Pair("test",x)
 
-        val player = Player(applicationContext,width,height,id++,this)
-        gameObjects += Pair("Player",player)
+
+
+
+
+        val terrain = Terrain(applicationContext,width,height,id++)
+        gameObjects += Pair("Terrain",terrain)
 
         val obstacle = Obstacle(applicationContext,width,height,id++)
         gameObjects += Pair("Obstacle1",obstacle)
 
-        val terrain = Terrain(applicationContext,width,height,id++)
-        gameObjects += Pair("Terrain",terrain)
+        val player = Player(applicationContext,width,height,id++,this)
+        gameObjects += Pair("Player",player)
 
         gameObjects.values.forEach {
             mFrame?.addView(it)

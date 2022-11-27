@@ -8,6 +8,7 @@ import android.util.Log
 import ca.unb.mobiledev.slope.Collision
 import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.Vec2
+import kotlin.math.atan
 import kotlin.random.Random
 
 import ca.unb.mobiledev.slope.R.drawable.coin as texture
@@ -17,13 +18,13 @@ import ca.unb.mobiledev.slope.noise.SimplexNoise_Octave as Noise
 class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int)
     :ObjectView(context,displayWidth,displayHeight,objId) {
 
-    val SEGMENT_WIDTH = 250f
-    val NOISE_STEP = 1f
-    val HEIGHT_SPREAD = 100f //how much
+    private val SEGMENT_WIDTH = 250f
+    private val NOISE_STEP = 1f
+    private val HEIGHT_SPREAD = 100f //how much
 
     override val defaultBitmap = texture
 
-    var extents = Vec2(32f,32f)
+    //var extents = Vec2(32f,32f)
     //var collider = Collision.BoxCollider(position,extents)
 
     val y= Random.nextInt()
@@ -37,6 +38,8 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
 
     private var verts_mutable = mutableListOf<Float>()
     private lateinit var verts:FloatArray
+
+    private val offset = Vec2(0f,-600f)
 
     override fun start(){
 
@@ -52,23 +55,30 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
             val height_1 = noise.noise(i*NOISE_STEP.toDouble(),0.0).toFloat()
             val height_2 = noise.noise((i+1)*NOISE_STEP.toDouble(),0.0).toFloat()
             segments.add(Segment(
-                Vec2(i*SEGMENT_WIDTH,height_1*HEIGHT_SPREAD),
-                Vec2((i+1)*SEGMENT_WIDTH,height_2*HEIGHT_SPREAD))
+                Vec2(i*SEGMENT_WIDTH + offset.x,height_1*HEIGHT_SPREAD + offset.y),
+                Vec2((i+1)*SEGMENT_WIDTH + offset.x,height_2*HEIGHT_SPREAD + offset.y))
             )
 
         }
         segments.forEach {
             verts_mutable.addAll(it.getVertices())
         }
-        verts = displaceVerts(verts_mutable,Vec2(0f,600f)).toFloatArray()
+        verts = verts_mutable.toFloatArray()
+       // verts = displaceVerts(verts_mutable,Vec2(0f,600f)).toFloatArray()
 
         //val segment = Segment(Vec2(0f,250f),Vec2(300f,100f))
         //verts = displaceVerts(segment.getVertices(),Vec2(500f,600f)).toFloatArray()
 
     }
 
-    override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
+    //TODO: find a way to fix rotation, it seems to ge the right rotation,
+    //but it also displaces the player up or down
 
+    override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
+        val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
+        val player:Player = objMap["Player"] as Player
+        //obstacle.position = playerCollide(obstacle.position)//segments[2].getSurfacePos(5f)
+        
     }
 
     /*fun vecsToTri(a:Vec2,b:Vec2,c:Vec2):FloatArray{
@@ -115,26 +125,63 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
 
     }
 
+    fun getPlayerAngle(playerPos:Vec2):Float{
+        val segment = getSegmentByPlayerPos(playerPos)
+        if(segment != null){
+            //Log.i("ROTATE PLAYER",segment.getAngle().toString())
+            return Math.toDegrees(segment.getAngle().toDouble()).toFloat()
+        }
+        return 0f;
+    }
+
+    fun playerCollide(playerPos:Vec2):Vec2{
+        val segment = getSegmentByPlayerPos(playerPos)
+        if(segment != null){
+            return segment.getSurfacePos(playerPos.x)
+        }
+        Log.i("T-P Collide","NO SEGMENT")
+        return Vec2(-1f,-1f)
+    }
+
+    fun checkPlayerCollide(playerPos:Vec2):Boolean{
+        val segment = getSegmentByPlayerPos(playerPos)
+        if(segment != null) {
+            return segment.checkPlayerCollision(playerPos)
+        }
+        return false
+    }
+
+    private fun getSegmentByPlayerPos(playerPos:Vec2):Segment?{
+        val segmentNum = (playerPos.x/SEGMENT_WIDTH).toInt()
+        //Log.i("SEGMENT NUM",segmentNum.toString())
+        if(segmentNum < segments.size){
+            return segments[segmentNum]
+        }
+        return null
+    }
+
     class Segment(val l: Vec2,val r: Vec2){
         private val m = getSlope()
-        private val b = getOffset()
+        private val b = -l.y //getOffset()
+
+        private val horizontalOffset = l.x
         //get m from y=mx+b
         private fun getSlope():Float{
-            return (r.y-l.y)/(r.x-l.x) //negative?
+            return -(r.y-l.y)/(r.x-l.x) //negative? >>
         }
 
-        private fun getOffset():Float{
-            return l.y
+        fun getAngle():Float{
+            //atan = inverse tan
+            return atan(m)
         }
 
-        fun checkPlayerCollision(playerPos:Vec2):Vec2{
-            val slopeY = m*playerPos.x + b
-            if(playerPos.y > slopeY){
-                return Vec2(playerPos.x,slopeY)
-            }
-            else{
-                return playerPos
-            }
+        fun getSurfacePos(x:Float):Vec2{
+            val slopeY = (x-horizontalOffset)*m +b//x/m + b
+            return Vec2(x,slopeY) //return playerPos
+        }
+
+        fun checkPlayerCollision(playerPos:Vec2):Boolean{
+            return playerPos.y > getSurfacePos(playerPos.x).y
         }
 
         fun getVertices(): MutableList<Float> {

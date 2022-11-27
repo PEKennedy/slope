@@ -29,10 +29,15 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
 
     private var hasBitmap = false
 
+    var bitmapOffset = Vec2(0f,0f)
+
+    var objRotation = 0f
 
     fun setBitmap(bitmapResource:Int=defaultBitmap){
         try{
             val bitmap = BitmapFactory.decodeResource(resources, bitmapResource)
+            //by default, offset so positions are at center-bottom
+            bitmapOffset = Vec2(bitmap.width.toFloat()/2, bitmap.height.toFloat())
             scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.width, bitmap.height,false)
             hasBitmap = true
         }catch(e:Exception){
@@ -44,7 +49,11 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
     @Synchronized
     override fun onDraw(canvas: Canvas) {
         if(hasBitmap) {
+            canvas.save()
+            canvas.rotate(objRotation,
+                screenPos.y+bitmapOffset.x,screenPos.y+bitmapOffset.y)
             canvas.drawBitmap(scaledBitmap, screenPos.x, screenPos.y, mPainter)
+            canvas.restore()
         }
     }
 
@@ -84,6 +93,6 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
     }
 
     protected fun setScreenPos(cameraPos: Vec2) {
-        screenPos = position - cameraPos
+        screenPos = position - bitmapOffset - cameraPos
     }
 }
