@@ -29,4 +29,11 @@
     <string name="your_best_high_score">Your Best Score:</string>
     <string name="new_high_score">New High Score!</string>
     <string name="clear_save">Clear Save Data</string>
+    <string name="credits">Credits</string>
+    <string name="credits_text">
+        Project by Peter and Isak\n
+        For Dr. Powell\'s CS2063\n
+        Noise Library by:\n
+        Stefan Gustavson &amp; Peter Eastman \n
+    </string>
 </resources>

@@ -13,6 +13,7 @@ class MainMenuActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_menu)
         val btnPlay = findViewById<Button>(R.id.btnPlay)
         val btnClear = findViewById<Button>(R.id.btnClear)
+        val btnCredits = findViewById<Button>(R.id.btnCredits)
         btnPlay.setOnClickListener {
             val intent = Intent(this@MainMenuActivity, GameActivity::class.java)
             startActivity(intent)
@@ -22,6 +23,10 @@ class MainMenuActivity : AppCompatActivity() {
             val editor = sharedPref.edit()
             editor.clear()
             editor.commit()
+        }
+        btnCredits.setOnClickListener{
+            val creditsDialog = CreditsDialog()
+            creditsDialog.show(supportFragmentManager,"credits_menu")
         }
         
     }
