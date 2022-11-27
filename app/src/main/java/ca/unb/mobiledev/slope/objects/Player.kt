@@ -24,7 +24,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
     override fun start(){
         setBitmap()
         //500,200 vs 200,300  //450
-        position += Vec2(450f,200f)
+        position += Vec2(100f,200f)
     }
 
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
@@ -45,6 +45,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             else{
                 position += velocity*deltaT //physics
                 velocity.y += gravity
+                velocity.x = 5f/deltaT
             }
         }
 
@@ -53,6 +54,8 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             val collided = terrain.checkPlayerCollide(position)
 
             //would probably want to lerp this
+            //TODO: Seems rotation gets messed up based on how far to the
+            //right on the screen the player is??
             objRotation = terrain.getPlayerAngle(position)
 
             if(collided){

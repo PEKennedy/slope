@@ -39,9 +39,9 @@ class textureObj(id: Int) : GameObject(id) {
         pos.x += sin(sinProg).toFloat()*10f / deltaT.toFloat()
     }
 
-    override fun render(canvas: Canvas, screenPos: Vec2) {
+    override fun render(canvas: Canvas, objScreenPos: Vec2) {
         //Log.i("gameThread", "PosX2: $posX")
-        var screenPos = WorldToScreenCoordinates(pos,screenPos)
-        canvas.drawCircle(screenPos.x,screenPos.y,150f,paint)
+        var objScreenPos = WorldToScreenCoordinates(pos,objScreenPos)
+        canvas.drawCircle(objScreenPos.x,objScreenPos.y,150f,paint)
     }*/
 }

@@ -19,7 +19,7 @@ class Obstacle(context: Context?, displayWidth: Int, displayHeight: Int, objId: 
 
     override fun start(){
         setBitmap()
-        position += Vec2(200f,300f)
+        position += Vec2(500f,300f)
         collider.position = position-Vec2(0f,100f)
     }
 

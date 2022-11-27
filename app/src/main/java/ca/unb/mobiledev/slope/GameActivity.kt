@@ -122,6 +122,8 @@ class GameActivity : AppCompatActivity(), CloseHandle {
                         gameOver()
                     }
                 }
+
+                cameraPos = player.position + Vec2(-300f,-400f)
             }
 
 

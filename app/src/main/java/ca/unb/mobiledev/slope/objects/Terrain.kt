@@ -2,10 +2,8 @@ package ca.unb.mobiledev.slope.objects
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.util.Log
-import ca.unb.mobiledev.slope.Collision
 import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.Vec2
 import kotlin.math.atan
@@ -51,7 +49,7 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
 
 
 
-        for(i in 0..5){
+        for(i in 0..10){
             val height_1 = noise.noise(i*NOISE_STEP.toDouble(),0.0).toFloat()
             val height_2 = noise.noise((i+1)*NOISE_STEP.toDouble(),0.0).toFloat()
             segments.add(Segment(
@@ -75,10 +73,10 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
     //but it also displaces the player up or down
 
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
-        val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
-        val player:Player = objMap["Player"] as Player
+        //val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
+        //val player:Player = objMap["Player"] as Player
         //obstacle.position = playerCollide(obstacle.position)//segments[2].getSurfacePos(5f)
-        
+
     }
 
     /*fun vecsToTri(a:Vec2,b:Vec2,c:Vec2):FloatArray{
@@ -98,7 +96,7 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
             }
             i += 1
         }
-        Log.i("Terrain",x.toString())
+        //Log.i("Terrain",x.toString())
         return x
     }
 
@@ -158,6 +156,15 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
             return segments[segmentNum]
         }
         return null
+    }
+
+    override fun render(camera: Vec2) {
+        //super.render(camera)
+
+        //displace the vertices' screenposition
+        verts = displaceVerts(verts_mutable,-camera).toFloatArray()
+        this@Terrain.postInvalidate()
+
     }
 
     class Segment(val l: Vec2,val r: Vec2){

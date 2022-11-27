@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.util.Log
 import android.view.View
 import java.lang.Exception
 
@@ -21,7 +20,7 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
     private val mDisplayWidth: Int = displayWidth
     private val mDisplayHeight: Int = displayHeight
 
-    private var screenPos = Vec2(0f,0f)
+    protected var objScreenPos = Vec2(0f,0f)
     var position = Vec2(0f,0f)//Vec2(displayWidth / 2.0f,displayHeight / 2.0f)
 
     // Reference to the scaled bitmap object
@@ -51,8 +50,8 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
         if(hasBitmap) {
             canvas.save()
             canvas.rotate(objRotation,
-                screenPos.y+bitmapOffset.x,screenPos.y+bitmapOffset.y)
-            canvas.drawBitmap(scaledBitmap, screenPos.x, screenPos.y, mPainter)
+                objScreenPos.y+bitmapOffset.x,objScreenPos.y+bitmapOffset.y)
+            canvas.drawBitmap(scaledBitmap, objScreenPos.x, objScreenPos.y, mPainter)
             canvas.restore()
         }
     }
@@ -64,10 +63,10 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
 
     private fun isOnScreen():Boolean {
         // Return true if the BubbleView is on the screen
-        return screenPos.x <= mDisplayWidth
-                && screenPos.x + BITMAP_SIZE >= 0
-                && screenPos.y <= mDisplayHeight
-                && screenPos.y + BITMAP_SIZE >= 0
+        return objScreenPos.x <= mDisplayWidth
+                && objScreenPos.x + BITMAP_SIZE >= 0
+                && objScreenPos.y <= mDisplayHeight
+                && objScreenPos.y + BITMAP_SIZE >= 0
     }
 
     val isActive = true
@@ -82,7 +81,7 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
 
     }
 
-    open fun render(camera:Vec2=Vec2(0f,0f)){//canvas: Canvas, screenPos: Vec2){
+    open fun render(camera:Vec2=Vec2(0f,0f)){//canvas: Canvas, objScreenPos: Vec2){
         if(hasBitmap){
             setScreenPos(camera)
             if (isOnScreen()) {
@@ -93,6 +92,6 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
     }
 
     protected fun setScreenPos(cameraPos: Vec2) {
-        screenPos = position - bitmapOffset - cameraPos
+        objScreenPos = position - bitmapOffset - cameraPos
     }
 }
