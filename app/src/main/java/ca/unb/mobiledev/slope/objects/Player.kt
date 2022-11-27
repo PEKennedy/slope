@@ -21,8 +21,9 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
 
     var hitObstacle = false
 
-    override fun start(){
+    override fun start(objMap:Map<String,ObjectView>){
         setBitmap()
+        hitObstacle = false
         //500,200 vs 200,300  //450
         position += Vec2(100f,200f)
     }
@@ -64,6 +65,14 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                 position = terrain.playerCollide(position)
                 velocity.y = 0F
             }
+
+            val segmentNum = terrain.getSegmentNum(position)
+            if(segmentNum > 3){
+                val displaceVec = Vec2(-250f*2f,0f)
+               // position += displaceVec
+               // terrain.offset += displaceVec
+            }
+
         }
 
 

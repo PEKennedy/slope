@@ -71,7 +71,7 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
 
     val isActive = true
 
-    open fun start(){//bitmap:Int=-1){
+    open fun start(objMap:Map<String,ObjectView>){//bitmap:Int=-1){
         // Smooth out the edges
         //mPainter.isAntiAlias = true
 

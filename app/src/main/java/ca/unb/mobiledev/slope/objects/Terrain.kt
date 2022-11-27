@@ -37,9 +37,9 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
     private var verts_mutable = mutableListOf<Float>()
     private lateinit var verts:FloatArray
 
-    private val offset = Vec2(0f,-600f)
+    var offset = Vec2(0f,-600f)
 
-    override fun start(){
+    override fun start(objMap:Map<String,ObjectView>){
 
         //setBitmap()
         //val variation = noise.noise(1.0,0.0).toFloat()
@@ -56,6 +56,10 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
                 Vec2(i*SEGMENT_WIDTH + offset.x,height_1*HEIGHT_SPREAD + offset.y),
                 Vec2((i+1)*SEGMENT_WIDTH + offset.x,height_2*HEIGHT_SPREAD + offset.y))
             )
+            /*segments.add(Segment(
+                Vec2(i*SEGMENT_WIDTH,height_1*HEIGHT_SPREAD),
+                Vec2((i+1)*SEGMENT_WIDTH ,height_2*HEIGHT_SPREAD))
+            )*/
 
         }
         segments.forEach {
@@ -147,6 +151,12 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
             return segment.checkPlayerCollision(playerPos)
         }
         return false
+    }
+
+    fun getSegmentNum(playerPos: Vec2):Int{
+        val segmentNum = (playerPos.x/SEGMENT_WIDTH).toInt()
+        if(segmentNum < segments.size) return segmentNum
+        return -1
     }
 
     private fun getSegmentByPlayerPos(playerPos:Vec2):Segment?{

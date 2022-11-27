@@ -17,10 +17,13 @@ class Obstacle(context: Context?, displayWidth: Int, displayHeight: Int, objId: 
 
 
 
-    override fun start(){
+    override fun start(objMap:Map<String,ObjectView>){
         setBitmap()
-        position += Vec2(500f,300f)
-        collider.position = position-Vec2(0f,100f)
+        val terrain:Terrain = objMap["Terrain"] as Terrain
+        position = terrain.playerCollide(Vec2(2400f,300f))
+        collider.position = position //- Vec2(32f,32f)
+        //position += Vec2(250f*10f,300f)
+        //collider.position = position-Vec2(0f,100f)
     }
 
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){

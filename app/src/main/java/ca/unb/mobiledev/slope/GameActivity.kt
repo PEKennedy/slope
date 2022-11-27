@@ -3,6 +3,7 @@ package ca.unb.mobiledev.slope
 import android.app.Activity
 import android.graphics.Point
 import android.os.*
+import android.util.Log
 import android.view.WindowInsets
 import android.widget.Button
 import android.widget.RelativeLayout
@@ -42,7 +43,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     var cameraPos = Vec2(0f,0f)
 
     //use a map so its easy to find objects
-    var gameObjects = mapOf<String,ObjectView>()
+    var gameObjects = mutableMapOf<String,ObjectView>() //:MutableMap<String,ObjectView>// = MutableMap<String,ObjectView>()
 
     // Reference to the thread job
     private var mMoverFuture: ScheduledFuture<*>? = null
@@ -56,11 +57,13 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         btnPause.setOnClickListener {
             pause()
         }
-        mFrame = findViewById(R.id.frame) //relativeLayout
+        mFrame = findViewById(R.id.gameFrame)//findViewById(R.id.frame) //relativeLayout gameFrame
 
         distText = findViewById(R.id.distance)
         distText.text = "testing"
+        Log.i("ACTIVITY",btnPause.text.toString())
         //actionBar?.hide()
+
 
         startGame()
 
@@ -72,12 +75,15 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         // Determine the screen size
         val (width, height) = getScreenDimensions(this)
 
-        //Reset the game state
-        gameObjects = mapOf<String,ObjectView>()
         mFrame?.removeAllViews()
+        //Reset the game state
+        gameObjects.clear() //= mapOf<String,ObjectView>()
+
+
         lastTime = System.currentTimeMillis()
         id = 0
-        mMoverFuture = null
+        //mMoverFuture = null
+
 
         //foreach object
         //val x = ObjectView(applicationContext,width,height,id++)
@@ -99,7 +105,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
         gameObjects.values.forEach {
             mFrame?.addView(it)
-            it.start()
+            it.start(gameObjects)
         }
 
         // Creates a WorkerThread
@@ -117,8 +123,10 @@ class GameActivity : AppCompatActivity(), CloseHandle {
                 }
 
                 runOnUiThread {
-                   setDistanceText((player.position.y/100f).toInt())
+                   setDistanceText((player.position.x/100f).toInt())
                     if(player.hitObstacle){
+                        executor.shutdown()
+                        executor.awaitTermination(3000L,TimeUnit.MILLISECONDS)
                         gameOver()
                     }
                 }
@@ -131,10 +139,12 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     }
 
     fun gameOver(){
-        val gameOverMenu = GameOverMenuDialog(this,distance)
-        gameOverMenu.show(supportFragmentManager,"game_over_menu")
-        gameOverMenu.isCancelable = false
-        isPaused = true
+        if(!isPaused){
+            val gameOverMenu = GameOverMenuDialog(this,distance)
+            gameOverMenu.show(supportFragmentManager,"game_over_menu")
+            gameOverMenu.isCancelable = false
+            isPaused = true
+        }
     }
 
     override fun onDestroy() {
@@ -147,7 +157,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         isPaused = true
     }
 
-    //onPause, onResume >> try to suspend things to conserve battery
+    //TODO onPause, onResume >> try to suspend things to conserve battery
 
     override fun close() {
         finish()
