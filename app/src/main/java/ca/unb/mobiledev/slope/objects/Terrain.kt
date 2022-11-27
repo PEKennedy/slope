@@ -48,7 +48,7 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
         //collider.position = position-Vec2(0f,100f)
 
 
-
+        /*
         for(i in 0..10){
             val height_1 = noise.noise(i*NOISE_STEP.toDouble(),0.0).toFloat()
             val height_2 = noise.noise((i+1)*NOISE_STEP.toDouble(),0.0).toFloat()
@@ -56,16 +56,12 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
                 Vec2(i*SEGMENT_WIDTH + offset.x,height_1*HEIGHT_SPREAD + offset.y),
                 Vec2((i+1)*SEGMENT_WIDTH + offset.x,height_2*HEIGHT_SPREAD + offset.y))
             )
-            /*segments.add(Segment(
-                Vec2(i*SEGMENT_WIDTH,height_1*HEIGHT_SPREAD),
-                Vec2((i+1)*SEGMENT_WIDTH ,height_2*HEIGHT_SPREAD))
-            )*/
-
         }
         segments.forEach {
             verts_mutable.addAll(it.getVertices())
         }
-        verts = verts_mutable.toFloatArray()
+        verts = verts_mutable.toFloatArray()*/
+        generateNewSegments(10)
        // verts = displaceVerts(verts_mutable,Vec2(0f,600f)).toFloatArray()
 
         //val segment = Segment(Vec2(0f,250f),Vec2(300f,100f))
@@ -73,8 +69,29 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
 
     }
 
-    //TODO: find a way to fix rotation, it seems to ge the right rotation,
+    private var lastSegment = 0
+
+    fun generateNewSegments(numSegments:Int=2) {
+
+        for(i in 0..numSegments){
+            val height_1 = noise.noise((i+lastSegment)*NOISE_STEP.toDouble(),0.0).toFloat()
+            val height_2 = noise.noise((i+1+lastSegment)*NOISE_STEP.toDouble(),0.0).toFloat()
+            segments.add(Segment(
+                Vec2((i+lastSegment)*SEGMENT_WIDTH + offset.x,height_1*HEIGHT_SPREAD + offset.y),
+                Vec2((i+1+lastSegment)*SEGMENT_WIDTH + offset.x,height_2*HEIGHT_SPREAD + offset.y))
+            )
+        }
+        lastSegment += numSegments+1
+        segments.forEach {
+            verts_mutable.addAll(it.getVertices())
+        }
+    }
+
+
+    //TODO: find a way to fix rotation, it seems to get the right rotation,
     //but it also displaces the player up or down
+    //** seems mitigated by having the player to the right of the screen
+    //so it seems affected by screen coordinate
 
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
         //val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
@@ -159,6 +176,10 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
         return -1
     }
 
+    fun getNumSegments():Int{
+        return segments.size
+    }
+
     private fun getSegmentByPlayerPos(playerPos:Vec2):Segment?{
         val segmentNum = (playerPos.x/SEGMENT_WIDTH).toInt()
         //Log.i("SEGMENT NUM",segmentNum.toString())
@@ -176,6 +197,8 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
         this@Terrain.postInvalidate()
 
     }
+
+
 
     class Segment(val l: Vec2,val r: Vec2){
         private val m = getSlope()

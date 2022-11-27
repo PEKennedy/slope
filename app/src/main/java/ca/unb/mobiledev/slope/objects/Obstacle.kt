@@ -21,7 +21,8 @@ class Obstacle(context: Context?, displayWidth: Int, displayHeight: Int, objId: 
         setBitmap()
         val terrain:Terrain = objMap["Terrain"] as Terrain
         position = terrain.playerCollide(Vec2(2400f,300f))
-        collider.position = position //- Vec2(32f,32f)
+        //TODO: the +Vec2 is to raise obstacle for testing
+        collider.position = position + Vec2(0f,-500f) //- Vec2(32f,32f)
         //position += Vec2(250f*10f,300f)
         //collider.position = position-Vec2(0f,100f)
     }

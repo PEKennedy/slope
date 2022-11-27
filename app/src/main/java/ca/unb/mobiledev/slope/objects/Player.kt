@@ -21,6 +21,8 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
 
     var hitObstacle = false
 
+    var playerSpeed = 10f
+
     override fun start(objMap:Map<String,ObjectView>){
         setBitmap()
         hitObstacle = false
@@ -46,7 +48,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             else{
                 position += velocity*deltaT //physics
                 velocity.y += gravity
-                velocity.x = 5f/deltaT
+                velocity.x = playerSpeed/deltaT
             }
         }
 
@@ -67,10 +69,14 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             }
 
             val segmentNum = terrain.getSegmentNum(position)
-            if(segmentNum > 3){
-                val displaceVec = Vec2(-250f*2f,0f)
+            val finalSegment = terrain.getNumSegments()
+            if(finalSegment - segmentNum < 8){
+                //val displaceVec = Vec2(-250f*2f,0f)
                // position += displaceVec
                // terrain.offset += displaceVec
+
+                terrain.generateNewSegments()
+
             }
 
         }
