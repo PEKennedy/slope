@@ -6,13 +6,13 @@ import ca.unb.mobiledev.slope.Collision
 import ca.unb.mobiledev.slope.GameActivity
 import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.Vec2
-import ca.unb.mobiledev.slope.R.drawable.skifrog as texture
+import ca.unb.mobiledev.slope.R//.drawable.skifrog as texture
 
 class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int,val activity: GameActivity,
     val obstacles: MutableList<Obstacle>)
     :ObjectView(context,displayWidth,displayHeight,objId) {
 
-    override val defaultBitmap = texture
+    override val defaultBitmap = R.drawable.skifrog //texture
 
     var velocity = Vec2(0f,0.0f)
     val gravity = 18f//9.81f
@@ -57,6 +57,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                 position = terrain.playerCollide(position)
                 velocity.y = 0F
                 grounded = true
+
             }
 
             // Check for collision with all obstacles
@@ -65,6 +66,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                 if(collide){
                     hitObstacle = true
                     velocity.y = 0F
+                    setBitmap(R.drawable.skifrogcrash)
                 }
             }
 
@@ -87,13 +89,13 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             //Terrain Generation logic
             val segmentNum = terrain.getSegmentNum(position)
             val finalSegment = terrain.getNumSegments()
-            if(finalSegment - segmentNum < 8){
+            if(finalSegment - segmentNum < 10){
                 //val displaceVec = Vec2(-250f*2f,0f)
                // position += displaceVec
                // terrain.offset += displaceVec
 
-                terrain.generateNewSegments(2)
-                if((0..10).random() < 5) terrain.cycleObstacle()
+                terrain.generateNewSegments(4,position.y)
+                if((0..10).random() < 8) terrain.cycleObstacle()
 
                 //terrain.removeOldSegments()
             }

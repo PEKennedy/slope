@@ -18,9 +18,9 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
               val obstacles: MutableList<Obstacle>)
     :ObjectView(context,displayWidth,displayHeight,objId) {
 
-    private val SEGMENT_WIDTH = 250f
-    private val NOISE_STEP = 1f
-    private val HEIGHT_SPREAD = 100f //how much
+    private val SEGMENT_WIDTH = 200f //250f
+    private val NOISE_STEP = 0.2f //1f
+    private val HEIGHT_SPREAD = 150f //how much //100f
 
     override val defaultBitmap = texture
 
@@ -30,7 +30,6 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
     //0 = random seed
     val noise = Noise(0)
 
-    //private var samples = mutableListOf<Float>()
     private var segments = mutableListOf<Segment>()
 
     private var verts_mutable = mutableListOf<Float>()
@@ -40,16 +39,13 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
 
     private var lastSegment = 0
 
-    //var obstacles = mutableListOf<Obstacle>()
-
-
     //TODO: find a way to fix rotation, it seems to get the right rotation,
     //but it also displaces the player up or down
     //** seems mitigated by having the player to the left of the screen
     //so it seems affected by screen coordinate
 
     override fun start(objMap:Map<String,ObjectView>){
-        generateNewSegments(10)
+        generateNewSegments(12,0f)
         for(ob in obstacles){
             cycleObstacle(false)
         }
@@ -89,18 +85,24 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
         //obstacleCount++
     }*/
 
-    fun generateNewSegments(numSegments:Int=2) {
+    private val overallSlope = -0.25f
+    fun gradient(seg:Int):Float{
+        val x = seg*SEGMENT_WIDTH
+        return overallSlope*x
+    }
+
+    fun generateNewSegments(numSegments:Int=2, yOffset: Float) {
         for(i in 0..numSegments){
             val height_1 = noise.noise((i+lastSegment)*NOISE_STEP.toDouble(),0.0).toFloat()
             val height_2 = noise.noise((i+1+lastSegment)*NOISE_STEP.toDouble(),0.0).toFloat()
             segments.add(Segment(
-                Vec2((i+lastSegment)*SEGMENT_WIDTH + offset.x,height_1*HEIGHT_SPREAD + offset.y),
-                Vec2((i+1+lastSegment)*SEGMENT_WIDTH + offset.x,height_2*HEIGHT_SPREAD + offset.y))
+                Vec2((i+lastSegment)*SEGMENT_WIDTH + offset.x,(height_1*HEIGHT_SPREAD) + gradient(lastSegment+i) + offset.y),
+                Vec2((i+1+lastSegment)*SEGMENT_WIDTH + offset.x,(height_2*HEIGHT_SPREAD)+ gradient(lastSegment+1+i) + offset.y))
             )
         }
         lastSegment += numSegments+1
         segments.forEach {
-            verts_mutable.addAll(it.getVertices())
+            verts_mutable.addAll(it.getVertices(yOffset))
         }
     }
 
@@ -231,17 +233,17 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
             return playerPos.y > getSurfacePos(playerPos.x).y
         }
 
-        fun getVertices(): MutableList<Float> {
+        fun getVertices(yOffset:Float): MutableList<Float> {
             return mutableListOf<Float>(
                 //tri 1
                 l.x,-l.y,
                 r.x,-r.y,
-                l.x,2000f,
+                l.x,1500f+yOffset,
 
                 //tri 2
                 r.x,-r.y,
-                r.x,2000f,
-                l.x,2000f
+                r.x,1500f+yOffset,
+                l.x,1500f+yOffset
             )
         }
         fun getVerticesFinal(): FloatArray {

@@ -67,7 +67,7 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
         return objScreenPos.x <= mDisplayWidth
                 && objScreenPos.x + BITMAP_SIZE + bitmapOffset.x >= 0
                 && objScreenPos.y <= mDisplayHeight
-                && objScreenPos.y + BITMAP_SIZE >= 0
+                && objScreenPos.y + BITMAP_SIZE + bitmapOffset.y >= 0
     }
 
     //val isActive = true
