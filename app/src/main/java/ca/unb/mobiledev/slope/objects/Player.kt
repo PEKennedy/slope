@@ -6,7 +6,6 @@ import ca.unb.mobiledev.slope.Collision
 import ca.unb.mobiledev.slope.GameActivity
 import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.Vec2
-import kotlin.random.Random
 import ca.unb.mobiledev.slope.R.drawable.skifrog as texture
 
 class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int,val activity: GameActivity,
@@ -26,6 +25,9 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
     var playerSpeed = 10f
 
     var grounded = false
+
+    // How fast to rotate the player character to a new rotation
+    var rotationRate = 10.0f
 
     override fun start(objMap:Map<String,ObjectView>){
         setBitmap()
@@ -47,7 +49,8 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             //would probably want to lerp this
             //TODO: Seems rotation gets messed up based on how far to the
             //right on the screen the player is??
-            objRotation = terrain.getPlayerAngle(position)
+            //objRotation = terrain.getPlayerAngle(position)
+            objRotation = lerp1d( objRotation, terrain.getPlayerAngle(position), 0.0f ,1.0f, rotationRate*deltaT )
 
             if(collided){
                 //Log.i("COLLISION",collided.toString())
@@ -103,6 +106,12 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
 
 
 
+    }
+
+    // Linear interpolation between x1y1 and x2y2, given x
+    fun lerp1d(y1:Float, y2:Float, x1: Float, x2: Float, x:Float): Float {
+        val y = y1+(x-x1)*(( y2-y1 )/(x2-x1))
+        return y
     }
 
 }
