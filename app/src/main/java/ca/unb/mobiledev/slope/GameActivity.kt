@@ -130,10 +130,12 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         obstacles += obstacle3
 
         val obstacle4 = Obstacle(applicationContext,width,height,id++)
+        obstacle4.obType = 1 //snowman
         gameObjects += Pair("Obstacle4",obstacle4)
         obstacles += obstacle4
 
         val obstacle5 = Obstacle(applicationContext,width,height,id++)
+        obstacle5.obType = 1 //snowman
         gameObjects += Pair("Obstacle5",obstacle5)
         obstacles += obstacle5
 

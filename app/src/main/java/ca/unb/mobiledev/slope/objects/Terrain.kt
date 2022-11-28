@@ -51,7 +51,7 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
     override fun start(objMap:Map<String,ObjectView>){
         generateNewSegments(10)
         for(ob in obstacles){
-            cycleObstacle()
+            cycleObstacle(false)
         }
 
         //addObstacle(objMap)
@@ -64,15 +64,17 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
 
     //(lastSegment+Random(System.currentTimeMillis()).nextFloat())*SEGMENT_WIDTH
     //Vec2(800f,0f)
-    fun cycleObstacle(){
+    fun cycleObstacle(checkOnScreen:Boolean=true){
         val sortedObstacles = obstacles.sortedBy { it.position.x }
 
-        val rand = Random(System.currentTimeMillis()).nextFloat()*3
-        val x = (lastSegment.toFloat()+rand-3f)*SEGMENT_WIDTH
-        //Log.i("LAST SEG",lastSegment.toString())
-        sortedObstacles[0].position = playerCollide(Vec2(x,0f))
-        sortedObstacles[0].collider.position = sortedObstacles[0].position
-        //Log.i("CYCLE OB",x.toString())
+        if((!sortedObstacles[0].isOnScreen() && checkOnScreen) || !checkOnScreen){
+            val rand = Random(System.currentTimeMillis()).nextFloat()*3
+            val x = (lastSegment.toFloat()+rand-3f)*SEGMENT_WIDTH
+            //Log.i("LAST SEG",lastSegment.toString())
+            sortedObstacles[0].position = playerCollide(Vec2(x,0f))
+            sortedObstacles[0].collider.position = sortedObstacles[0].position
+            //Log.i("CYCLE OB",x.toString())
+        }
 
     }
 

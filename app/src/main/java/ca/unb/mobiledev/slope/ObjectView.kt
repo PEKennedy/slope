@@ -61,7 +61,7 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
         private const val MAX_STEP = 10
     }
 
-    private fun isOnScreen():Boolean {
+    fun isOnScreen():Boolean {
         // Return true if the BubbleView is on the screen
         //TODO: probably need to use bitmapOffset in other parts of the condition
         return objScreenPos.x <= mDisplayWidth

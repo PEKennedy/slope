@@ -46,7 +46,6 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             //val offsetPos = position //+ Vec2(32f,64f)
             val collided = terrain.checkPlayerCollide(position)
 
-            //would probably want to lerp this
             //TODO: Seems rotation gets messed up based on how far to the
             //right on the screen the player is??
             //objRotation = terrain.getPlayerAngle(position)
@@ -64,7 +63,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             obstacles.forEach {
                 val collide = collider.collideBox(it.collider)
                 if(collide){
-                    //hitObstacle = true
+                    hitObstacle = true
                     velocity.y = 0F
                 }
             }
@@ -74,7 +73,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             // Jumping.  Only allow jumping if already on the ground
             if( activity.wasTouched ){
                 if( grounded ){
-                    Log.i("PLAYER","JUMP")
+                    //Log.i("PLAYER","JUMP")
                     velocity.y -= 800f
                     grounded = false
                 }
@@ -94,7 +93,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                // terrain.offset += displaceVec
 
                 terrain.generateNewSegments(2)
-                if((0..10).random() < 4) terrain.cycleObstacle()
+                if((0..10).random() < 5) terrain.cycleObstacle()
 
                 //terrain.removeOldSegments()
             }
