@@ -31,6 +31,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
         setBitmap()
         hitObstacle = false
         //500,200 vs 200,300  //450
+        //context!!.
         position += Vec2(100f,200f)
     }
 
@@ -56,6 +57,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                 grounded = true
             }
 
+            // Check for collision with all obstacles
             obstacles.forEach {
                 val collide = collider.collideBox(it.collider)
                 if(collide){
@@ -65,11 +67,15 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             }
 
             //physics & controls
-            if(activity.wasTouched && grounded){
-                Log.i("PLAYER","JUMP")
-                velocity.y -= 800f
+
+            // Jumping.  Only allow jumping if already on the ground
+            if( activity.wasTouched ){
+                if( grounded ){
+                    Log.i("PLAYER","JUMP")
+                    velocity.y -= 800f
+                    grounded = false
+                }
                 activity.wasTouched = false
-                grounded = false
             }
 
             position += velocity*deltaT
