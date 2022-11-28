@@ -95,7 +95,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         gameObjects += Pair("Obstacle1",obstacle1)
         obstacles += obstacle1
 
-        /*val obstacle2 = Obstacle(applicationContext,width,height,id++)
+        val obstacle2 = Obstacle(applicationContext,width,height,id++)
         gameObjects += Pair("Obstacle2",obstacle2)
         obstacles += obstacle2
 
@@ -109,7 +109,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
         val obstacle5 = Obstacle(applicationContext,width,height,id++)
         gameObjects += Pair("Obstacle5",obstacle5)
-        obstacles += obstacle5*/
+        obstacles += obstacle5
 
         val player = Player(applicationContext,width,height,id++,this,obstacles)
         gameObjects += Pair("Player",player)

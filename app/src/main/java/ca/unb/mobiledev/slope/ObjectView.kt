@@ -63,13 +63,14 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
 
     private fun isOnScreen():Boolean {
         // Return true if the BubbleView is on the screen
+        //TODO: probably need to use bitmapOffset in other parts of the condition
         return objScreenPos.x <= mDisplayWidth
-                && objScreenPos.x + BITMAP_SIZE >= 0
+                && objScreenPos.x + BITMAP_SIZE + bitmapOffset.x >= 0
                 && objScreenPos.y <= mDisplayHeight
                 && objScreenPos.y + BITMAP_SIZE >= 0
     }
 
-    val isActive = true
+    //val isActive = true
 
     open fun start(objMap:Map<String,ObjectView>){//bitmap:Int=-1){
         // Smooth out the edges

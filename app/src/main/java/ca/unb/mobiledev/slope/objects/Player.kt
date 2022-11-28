@@ -91,6 +91,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                // terrain.offset += displaceVec
 
                 terrain.generateNewSegments()
+                terrain.cycleObstacle()
                 //terrain.removeOldSegments()
             }
 

@@ -50,6 +50,10 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
 
     override fun start(objMap:Map<String,ObjectView>){
         generateNewSegments(10)
+        for(ob in obstacles){
+            cycleObstacle()
+        }
+
         //addObstacle(objMap)
     }
 
@@ -59,10 +63,16 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
     }
 
     //(lastSegment+Random(System.currentTimeMillis()).nextFloat())*SEGMENT_WIDTH
+    //Vec2(800f,0f)
     fun cycleObstacle(){
-        obstacles.forEach {
-            it.position = playerCollide(Vec2(400f,0f))
-        }
+        val sortedObstacles = obstacles.sortedBy { it.position.x }
+
+        val rand = Random(System.currentTimeMillis()).nextFloat()*3
+        val x = (lastSegment.toFloat()+rand-3f)*SEGMENT_WIDTH
+        //Log.i("LAST SEG",lastSegment.toString())
+        sortedObstacles[0].position = playerCollide(Vec2(x,0f))
+        //Log.i("CYCLE OB",x.toString())
+
     }
 
     /*private var obstacleCount=  0
@@ -223,12 +233,12 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
                 //tri 1
                 l.x,-l.y,
                 r.x,-r.y,
-                l.x,1000f,
+                l.x,2000f,
 
                 //tri 2
                 r.x,-r.y,
-                r.x,1000f,
-                l.x,1000f
+                r.x,2000f,
+                l.x,2000f
             )
         }
         fun getVerticesFinal(): FloatArray {
