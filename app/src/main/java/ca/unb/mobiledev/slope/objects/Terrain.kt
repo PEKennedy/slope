@@ -71,6 +71,7 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
         val x = (lastSegment.toFloat()+rand-3f)*SEGMENT_WIDTH
         //Log.i("LAST SEG",lastSegment.toString())
         sortedObstacles[0].position = playerCollide(Vec2(x,0f))
+        sortedObstacles[0].collider.position = sortedObstacles[0].position
         //Log.i("CYCLE OB",x.toString())
 
     }

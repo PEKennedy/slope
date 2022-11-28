@@ -4,6 +4,8 @@ import android.app.Activity
 import android.graphics.Point
 import android.os.*
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.WindowInsets
 import android.widget.Button
 import android.widget.RelativeLayout
@@ -27,7 +29,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
     private val pauseMenu = PauseMenuDialog(this)
 
-
+    private var gestureDetector: GestureDetector? = null
 
 
     private var id = 0
@@ -51,6 +53,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     private var mMoverFuture: ScheduledFuture<*>? = null
 
     var distance = 0
+    var wasTouched = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +74,30 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        gestureDetector!!.onTouchEvent(event)
+        return super.onTouchEvent(event)
+    }
 
+    //borrowed from lab8
+    private fun setupGestureDetector(){
+        gestureDetector = GestureDetector(this,object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDown(motionEvent: MotionEvent): Boolean {
+                wasTouched = true
+                return true
+            }
+
+            override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+                return true
+            }
+
+            override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
+                //Log.i("TOUCH","TOUCH")
+                //wasTouched = true
+                return true
+            }
+        })
+    }
 
     fun startGame(){
         // Determine the screen size
@@ -169,6 +195,15 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     }
 
     //TODO onPause, onResume >> try to suspend things to conserve battery
+
+    override fun onResume() {
+        super.onResume()
+        setupGestureDetector()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
 
     override fun close() {
         finish()
