@@ -8,7 +8,8 @@ import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.Vec2
 import ca.unb.mobiledev.slope.R.drawable.skifrog as texture
 
-class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int,val activity: GameActivity)
+class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int,val activity: GameActivity,
+    val obstacles: MutableList<Obstacle>)
     :ObjectView(context,displayWidth,displayHeight,objId) {
 
     override val defaultBitmap = texture
@@ -32,12 +33,12 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
 
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
 
-        val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
+        //val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
         val terrain:Terrain = objMap["Terrain"] as Terrain
 
         //position = terrain.playerCollide(position)
 
-        if(obstacle != null){
+        /*if(obstacle != null){
             val collide = collider.collideBox(obstacle.collider)
             //Log.i("Player",collide.toString())
             if(collide){
@@ -50,7 +51,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                 velocity.y += gravity
                 velocity.x = playerSpeed/deltaT
             }
-        }
+        }*/
 
         if(terrain != null){
             //val offsetPos = position //+ Vec2(32f,64f)
@@ -68,6 +69,20 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                 velocity.y = 0F
             }
 
+            obstacles.forEach {
+                val collide = collider.collideBox(it.collider)
+                if(collide){
+                    hitObstacle = true
+                    velocity.y = 0F
+                }
+            }
+
+            //physics & controls
+            position += velocity*deltaT
+            velocity.y += gravity
+            velocity.x = playerSpeed/deltaT
+
+            //Terrain Generation logic
             val segmentNum = terrain.getSegmentNum(position)
             val finalSegment = terrain.getNumSegments()
             if(finalSegment - segmentNum < 8){
@@ -76,7 +91,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                // terrain.offset += displaceVec
 
                 terrain.generateNewSegments()
-
+                //terrain.removeOldSegments()
             }
 
         }

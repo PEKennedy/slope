@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.Log
+import android.widget.RelativeLayout
 import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.Vec2
 import kotlin.math.atan
@@ -13,7 +14,8 @@ import ca.unb.mobiledev.slope.R.drawable.coin as texture
 
 import ca.unb.mobiledev.slope.noise.SimplexNoise_Octave as Noise
 
-class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int)
+class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, objId: Int,
+              val obstacles: MutableList<Obstacle>)
     :ObjectView(context,displayWidth,displayHeight,objId) {
 
     private val SEGMENT_WIDTH = 250f
@@ -22,14 +24,11 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
 
     override val defaultBitmap = texture
 
-    //var extents = Vec2(32f,32f)
-    //var collider = Collision.BoxCollider(position,extents)
 
     val y= Random.nextInt()
-    //0 = random seed
-    val noise = Noise(0)//Noise(Random(System.currentTimeMillis()).nextInt()) //Random isnt very random, so give it
-    //a semi random seed
 
+    //0 = random seed
+    val noise = Noise(0)
 
     //private var samples = mutableListOf<Float>()
     private var segments = mutableListOf<Segment>()
@@ -39,40 +38,45 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
 
     var offset = Vec2(0f,-600f)
 
-    override fun start(objMap:Map<String,ObjectView>){
-
-        //setBitmap()
-        //val variation = noise.noise(1.0,0.0).toFloat()
-        //Log.i("test",variation.toString())
-        //position += Vec2(0f,100+200*variation)
-        //collider.position = position-Vec2(0f,100f)
-
-
-        /*
-        for(i in 0..10){
-            val height_1 = noise.noise(i*NOISE_STEP.toDouble(),0.0).toFloat()
-            val height_2 = noise.noise((i+1)*NOISE_STEP.toDouble(),0.0).toFloat()
-            segments.add(Segment(
-                Vec2(i*SEGMENT_WIDTH + offset.x,height_1*HEIGHT_SPREAD + offset.y),
-                Vec2((i+1)*SEGMENT_WIDTH + offset.x,height_2*HEIGHT_SPREAD + offset.y))
-            )
-        }
-        segments.forEach {
-            verts_mutable.addAll(it.getVertices())
-        }
-        verts = verts_mutable.toFloatArray()*/
-        generateNewSegments(10)
-       // verts = displaceVerts(verts_mutable,Vec2(0f,600f)).toFloatArray()
-
-        //val segment = Segment(Vec2(0f,250f),Vec2(300f,100f))
-        //verts = displaceVerts(segment.getVertices(),Vec2(500f,600f)).toFloatArray()
-
-    }
-
     private var lastSegment = 0
 
-    fun generateNewSegments(numSegments:Int=2) {
+    //var obstacles = mutableListOf<Obstacle>()
 
+
+    //TODO: find a way to fix rotation, it seems to get the right rotation,
+    //but it also displaces the player up or down
+    //** seems mitigated by having the player to the right of the screen
+    //so it seems affected by screen coordinate
+
+    override fun start(objMap:Map<String,ObjectView>){
+        generateNewSegments(10)
+        //addObstacle(objMap)
+    }
+
+    override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
+        //val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
+        //obstacle.position = playerCollide(obstacle.position)//segments[2].getSurfacePos(5f)
+    }
+
+    //(lastSegment+Random(System.currentTimeMillis()).nextFloat())*SEGMENT_WIDTH
+    fun cycleObstacle(){
+        obstacles.forEach {
+            it.position = playerCollide(Vec2(400f,0f))
+        }
+    }
+
+    /*private var obstacleCount=  0
+    fun addObstacle(objMap:Map<String,ObjectView>){
+        val ob = Obstacle(context, displayWidth,displayHeight,10)
+        mFrame.addView(ob)
+        ob.start(objMap)
+        ob.position = playerCollide(Vec2((lastSegment+Random(System.currentTimeMillis()).nextFloat())*SEGMENT_WIDTH,0f))
+        obstacles += ob
+        //gameObjects += Pair("Obstacle"+obstacleCount.toString(),ob)
+        //obstacleCount++
+    }*/
+
+    fun generateNewSegments(numSegments:Int=2) {
         for(i in 0..numSegments){
             val height_1 = noise.noise((i+lastSegment)*NOISE_STEP.toDouble(),0.0).toFloat()
             val height_2 = noise.noise((i+1+lastSegment)*NOISE_STEP.toDouble(),0.0).toFloat()
@@ -87,23 +91,11 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
         }
     }
 
-
-    //TODO: find a way to fix rotation, it seems to get the right rotation,
-    //but it also displaces the player up or down
-    //** seems mitigated by having the player to the right of the screen
-    //so it seems affected by screen coordinate
-
-    override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
-        //val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
-        //val player:Player = objMap["Player"] as Player
-        //obstacle.position = playerCollide(obstacle.position)//segments[2].getSurfacePos(5f)
-
+    fun removeOldSegments(numSegments:Int=2){
+        for(i in 0..numSegments){
+            segments.removeAt(0)
+        }
     }
-
-    /*fun vecsToTri(a:Vec2,b:Vec2,c:Vec2):FloatArray{
-        return floatArrayOf(a.x,a.y,b.x,b.y,c.x,c.y)
-    }*/
-
 
     private fun displaceVerts(ar:MutableList<Float>,d:Vec2):MutableList<Float>{
         val x = mutableListOf<Float>()
@@ -170,6 +162,8 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
         return false
     }
 
+    //TODO: if removeSegment is re-enabled, getSegmentNum seems to give the wrong segment
+
     fun getSegmentNum(playerPos: Vec2):Int{
         val segmentNum = (playerPos.x/SEGMENT_WIDTH).toInt()
         if(segmentNum < segments.size) return segmentNum
@@ -177,7 +171,7 @@ class Terrain(context: Context?, displayWidth: Int, displayHeight: Int, objId: I
     }
 
     fun getNumSegments():Int{
-        return segments.size
+        return lastSegment//segments.size
     }
 
     private fun getSegmentByPlayerPos(playerPos:Vec2):Segment?{

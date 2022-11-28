@@ -45,6 +45,8 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     //use a map so its easy to find objects
     var gameObjects = mutableMapOf<String,ObjectView>() //:MutableMap<String,ObjectView>// = MutableMap<String,ObjectView>()
 
+    var obstacles = mutableListOf<Obstacle>()
+
     // Reference to the thread job
     private var mMoverFuture: ScheduledFuture<*>? = null
 
@@ -82,25 +84,34 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
         lastTime = System.currentTimeMillis()
         id = 0
-        //mMoverFuture = null
 
 
         //foreach object
-        //val x = ObjectView(applicationContext,width,height,id++)
-        //x.setBitmap()
-        //gameObjects += Pair("test",x)
 
-
-
-
-
-        val terrain = Terrain(applicationContext,width,height,id++)
+        val terrain = Terrain(applicationContext,width,height,id++,obstacles)
         gameObjects += Pair("Terrain",terrain)
 
-        val obstacle = Obstacle(applicationContext,width,height,id++)
-        gameObjects += Pair("Obstacle1",obstacle)
+        val obstacle1 = Obstacle(applicationContext,width,height,id++)
+        gameObjects += Pair("Obstacle1",obstacle1)
+        obstacles += obstacle1
 
-        val player = Player(applicationContext,width,height,id++,this)
+        /*val obstacle2 = Obstacle(applicationContext,width,height,id++)
+        gameObjects += Pair("Obstacle2",obstacle2)
+        obstacles += obstacle2
+
+        val obstacle3 = Obstacle(applicationContext,width,height,id++)
+        gameObjects += Pair("Obstacle3",obstacle3)
+        obstacles += obstacle3
+
+        val obstacle4 = Obstacle(applicationContext,width,height,id++)
+        gameObjects += Pair("Obstacle4",obstacle4)
+        obstacles += obstacle4
+
+        val obstacle5 = Obstacle(applicationContext,width,height,id++)
+        gameObjects += Pair("Obstacle5",obstacle5)
+        obstacles += obstacle5*/
+
+        val player = Player(applicationContext,width,height,id++,this,obstacles)
         gameObjects += Pair("Player",player)
 
         gameObjects.values.forEach {
