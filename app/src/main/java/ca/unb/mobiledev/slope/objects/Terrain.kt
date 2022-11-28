@@ -45,7 +45,7 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
 
     //TODO: find a way to fix rotation, it seems to get the right rotation,
     //but it also displaces the player up or down
-    //** seems mitigated by having the player to the right of the screen
+    //** seems mitigated by having the player to the left of the screen
     //so it seems affected by screen coordinate
 
     override fun start(objMap:Map<String,ObjectView>){
