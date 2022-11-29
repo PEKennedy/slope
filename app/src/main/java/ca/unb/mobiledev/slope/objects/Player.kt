@@ -1,7 +1,6 @@
 package ca.unb.mobiledev.slope.objects
 
 import android.content.Context
-import android.util.Log
 import ca.unb.mobiledev.slope.Collision
 import ca.unb.mobiledev.slope.GameActivity
 import ca.unb.mobiledev.slope.ObjectView
