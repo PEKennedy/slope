@@ -15,22 +15,22 @@
         tools:layout_editor_absoluteY="16dp" />-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FF444444"
-    android:id="@+id/frame"
     android:layout_alignParentTop="true"
+    android:background="#5997C6"
     android:theme="@style/Theme.Slope"
     android:visibility="visible">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
+        android:id="@+id/gameFrame"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#FF444444"
-        android:id="@+id/gameFrame"
         android:layout_alignParentTop="true"
+        android:background="#22518A"
         android:theme="@style/Theme.Slope"
-        android:visibility="visible"> </RelativeLayout>
+        android:visibility="visible"></RelativeLayout>
 
     <!--<Button
         android:id="@+id/btnPause"

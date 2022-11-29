@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorBackground">#F44336</color>
     <color name="colorPaint">#F4DB36</color>
+    <color name="gameBackground">#809FF2</color>
 </resources>

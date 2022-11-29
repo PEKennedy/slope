@@ -41,6 +41,12 @@ class Obstacle(context: Context?, displayWidth: Int, displayHeight: Int, objId: 
             collider = Collision.BoxCollider(position,Vec2(64f,64f))
             setBitmap(texture)
         }
+        else if(type==2){
+            val texture = R.drawable.firtree1
+            extents = Vec2(32f,64f)
+            collider = Collision.BoxCollider(position,Vec2(32f,64f))
+            setBitmap(texture)
+        }
         else{ //crate
             extents = Vec2(32f,32f)
             setBitmap()

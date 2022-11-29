@@ -1,11 +1,12 @@
 package ca.unb.mobiledev.slope.objects
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.*
 import android.util.Log
 import android.widget.RelativeLayout
 import ca.unb.mobiledev.slope.ObjectView
+import ca.unb.mobiledev.slope.R
+//import ca.unb.mobiledev.slope.R
 import ca.unb.mobiledev.slope.Vec2
 import kotlin.math.atan
 import kotlin.random.Random
@@ -15,7 +16,7 @@ import ca.unb.mobiledev.slope.R.drawable.coin as texture
 import ca.unb.mobiledev.slope.noise.SimplexNoise_Octave as Noise
 
 class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, objId: Int,
-              val obstacles: MutableList<Obstacle>)
+              val obstacles: MutableList<Obstacle>, val bg:MutableList<Background>)
     :ObjectView(context,displayWidth,displayHeight,objId) {
 
     private val SEGMENT_WIDTH = 200f //250f
@@ -39,6 +40,17 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
 
     private var lastSegment = 0
 
+    var vertExtraOffset = Vec2(0f,0f)
+
+    val triPaint = Paint().apply{
+        val bitmap = BitmapFactory.decodeResource(
+            resources, R.drawable.ground
+        )
+        val shader = BitmapShader(
+            bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        this.shader = shader
+    }
+
     //TODO: find a way to fix rotation, it seems to get the right rotation,
     //but it also displaces the player up or down
     //** seems mitigated by having the player to the left of the screen
@@ -54,6 +66,7 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
     }
 
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
+
         //val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
         //obstacle.position = playerCollide(obstacle.position)//segments[2].getSurfacePos(5f)
     }
@@ -72,6 +85,19 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
             //Log.i("CYCLE OB",x.toString())
         }
 
+    }
+
+    fun cycleBackground(){
+        val sortedObstacles = bg.sortedBy { it.position.x }
+
+        if(sortedObstacles[0].isOnScreen()){
+            val rand = Random(System.currentTimeMillis()).nextFloat()*3
+            val x = (lastSegment.toFloat()+rand-3f)*SEGMENT_WIDTH
+            //Log.i("LAST SEG",lastSegment.toString())
+            sortedObstacles[0].position = playerCollide(Vec2(x,0f))
+            sortedObstacles[0].position.y += sortedObstacles[0].yOffset
+            //Log.i("CYCLE OB",x.toString())
+        }
     }
 
     /*private var obstacleCount=  0
@@ -112,6 +138,15 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
         }
     }
 
+    fun displaceSegs(d:Vec2){
+        segments.forEach {
+        //    it.l += d
+        //    it.r += d
+            it.updateCoords(d)
+        }
+
+    }
+
     private fun displaceVerts(ar:MutableList<Float>,d:Vec2):MutableList<Float>{
         val x = mutableListOf<Float>()
         var i = 0
@@ -143,10 +178,10 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
         //triangle_strip lets us reuse some verts
         canvas.drawVertices(Canvas.VertexMode.TRIANGLES,//TRIANGLE_STRIP,//TRIANGLES,
             verts.size, verts,0,
-            null,0,
+            verts,0,
         null,0,//verticesColors,0,
         null,0, 0,
-            Paint()
+            triPaint//Paint()
         )
 
     }
@@ -209,7 +244,14 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
 
 
 
-    class Segment(val l: Vec2,val r: Vec2){
+    class Segment(val lIn: Vec2, val rIn: Vec2){
+        var l = lIn
+        var r = rIn
+
+        fun updateCoords(offset:Vec2){
+            l = lIn+offset
+            r = rIn+offset
+        }
         private val m = getSlope()
         private val b = -l.y //getOffset()
 

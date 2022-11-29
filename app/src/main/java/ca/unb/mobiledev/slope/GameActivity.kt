@@ -48,6 +48,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     var gameObjects = mutableMapOf<String,ObjectView>() //:MutableMap<String,ObjectView>// = MutableMap<String,ObjectView>()
 
     var obstacles = mutableListOf<Obstacle>()
+    var background = mutableListOf<Background>()
 
     // Reference to the thread job
     private var mMoverFuture: ScheduledFuture<*>? = null
@@ -69,6 +70,9 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         Log.i("ACTIVITY",btnPause.text.toString())
         //actionBar?.hide()
 
+        val frame = findViewById<RelativeLayout>(R.id.frame)
+       // frame.setBackgroundColor(0x809FF2)//R.color.gameBackground)
+        //mFrame!!.setBackgroundColor(0x809FF2)
 
         startGame()
 
@@ -112,9 +116,17 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         id = 0
 
 
-        //foreach object
+        //foreach object (further back in draw order = first)
+        /*val bg1 = Background(applicationContext,width,height,id++)
+        gameObjects += Pair("Bg1",bg1)
+        background += bg1
 
-        val terrain = Terrain(applicationContext,width,height,id++,obstacles)
+        val bg2 = Background(applicationContext,width,height,id++)
+        bg2.obType = 1
+        gameObjects += Pair("Bg2",bg2)
+        background += bg2*/
+
+        val terrain = Terrain(applicationContext,width,height,id++,obstacles,background)
         gameObjects += Pair("Terrain",terrain)
 
         val obstacle1 = Obstacle(applicationContext,width,height,id++)
@@ -122,10 +134,12 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         obstacles += obstacle1
 
         val obstacle2 = Obstacle(applicationContext,width,height,id++)
+        obstacle2.obType = 2 //tree
         gameObjects += Pair("Obstacle2",obstacle2)
         obstacles += obstacle2
 
         val obstacle3 = Obstacle(applicationContext,width,height,id++)
+        obstacle3.obType = 2 //tree
         gameObjects += Pair("Obstacle3",obstacle3)
         obstacles += obstacle3
 
@@ -138,6 +152,10 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         obstacle5.obType = 1 //snowman
         gameObjects += Pair("Obstacle5",obstacle5)
         obstacles += obstacle5
+
+        val obstacle6 = Obstacle(applicationContext,width,height,id++)
+        gameObjects += Pair("Obstacle6",obstacle6)
+        obstacles += obstacle6
 
         val player = Player(applicationContext,width,height,id++,this,obstacles)
         gameObjects += Pair("Player",player)
@@ -175,6 +193,13 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
 
         }, 0, REFRESH_RATE.toLong(), TimeUnit.MILLISECONDS)
+    }
+
+    fun resetPositions(offset:Vec2){
+        gameObjects.values.forEach{
+            it.position += offset
+        }
+        cameraPos += offset
     }
 
     fun gameOver(){

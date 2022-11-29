@@ -57,7 +57,10 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                 position = terrain.playerCollide(position)
                 velocity.y = 0F
                 grounded = true
-
+                setBitmap(R.drawable.skifrog)
+            }
+            else{
+                //setBitmap(R.drawable.skifrogjump1)
             }
 
             // Check for collision with all obstacles
@@ -78,6 +81,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                     //Log.i("PLAYER","JUMP")
                     velocity.y -= 800f
                     grounded = false
+                    setBitmap(R.drawable.skifrogjump3)
                 }
                 activity.wasTouched = false
             }
@@ -94,8 +98,22 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                // position += displaceVec
                // terrain.offset += displaceVec
 
+                //val displacement = -position
+                //activity.resetPositions(displacement)
+                //terrain.displaceSegs(displacement)
+
+                //terrain.displaceSegs(Vec2(displacement.x,-displacement.y))
+
+                //terrain.offset += displacement
+                //terrain.vertExtraOffset += displacement
+
+                //position += displacement
+
                 terrain.generateNewSegments(4,position.y)
-                if((0..10).random() < 8) terrain.cycleObstacle()
+                if((0..10).random() < 8){
+                    terrain.cycleObstacle()
+                    //terrain.cycleBackground()
+                }
 
                 //terrain.removeOldSegments()
             }
