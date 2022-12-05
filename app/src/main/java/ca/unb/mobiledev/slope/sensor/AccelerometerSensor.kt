@@ -50,7 +50,7 @@ class AccelerometerSensor : SensorEventListener{
                 mLastUpdate = actualTime
 
             }
-            mTilt = event.values[2]
+            mTilt = event.values[1]
         }
     }
 
@@ -59,6 +59,7 @@ class AccelerometerSensor : SensorEventListener{
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-        TODO("Not yet implemented")
+
+
     }
 }
