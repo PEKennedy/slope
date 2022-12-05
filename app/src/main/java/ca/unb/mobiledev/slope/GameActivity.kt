@@ -168,7 +168,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         gameObjects += Pair("Obstacle6",obstacle6)
         obstacles += obstacle6
 
-        val player = Player(applicationContext,width,height,id++,this,obstacles)
+        val player = Player(applicationContext,width,height,id++,this,obstacles, mAccelerometer)
         gameObjects += Pair("Player",player)
 
         gameObjects.values.forEach {

@@ -16,6 +16,7 @@ class AccelerometerSensor : SensorEventListener{
     public val mAccel = FloatArray(3)
 
     private var mLastUpdate : Long = 0
+    private var mTilt : Float = 0F
 
     lateinit var mContext: Context
 
@@ -49,7 +50,12 @@ class AccelerometerSensor : SensorEventListener{
                 mLastUpdate = actualTime
 
             }
+            mTilt = event.values[2]
         }
+    }
+
+    public fun getTilt(): Float {
+        return mTilt
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
