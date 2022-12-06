@@ -12,7 +12,7 @@ class Collision {
         // Collider box
         class BoxCollider(var position:Vec2,var extents:Vec2):Collider{
 
-            // Get coordinates of the box as a vector 2
+            // Get coordinates of the opposite corner of the box as a vector 2
             fun getFarCoords():Vec2{
                 return Vec2(position.x+extents.x,position.y+extents.y)
             }
