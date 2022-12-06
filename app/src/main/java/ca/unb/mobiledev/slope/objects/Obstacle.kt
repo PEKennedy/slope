@@ -6,6 +6,7 @@ import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.R
 import ca.unb.mobiledev.slope.Vec2
 
+// Player obstacle.
 class Obstacle(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int)
     :ObjectView(context,displayWidth,displayHeight,objId) {
 
@@ -16,21 +17,19 @@ class Obstacle(context: Context?, displayWidth: Int, displayHeight: Int, objId: 
 
     var obType = 0
 
+    // Initialize the obstacle, including type and position
     override fun start(objMap:Map<String,ObjectView>){
+
         setObstacleType(obType)
-        //setBitmap()
-        //val terrain:Terrain = objMap["Terrain"] as Terrain
-        //position = terrain.playerCollide(Vec2(2400f,300f))
-        //TODO: the +Vec2 is to raise obstacle for testing
-        collider.position = position //+ Vec2(0f,-500f) //- Vec2(32f,32f)
-        //position += Vec2(250f*10f,300f)
-        //collider.position = position-Vec2(0f,100f)
+        collider.position = position
     }
 
+    // Unused default update method
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
 
     }
 
+    // Set the type of obstacle it is
     fun setObstacleType(type:Int=0){
         if(type == 1){ //snowman
             val texture = R.drawable.snowman1

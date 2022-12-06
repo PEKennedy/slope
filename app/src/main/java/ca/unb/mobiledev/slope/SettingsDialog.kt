@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.google.android.material.slider.Slider
 
+// Settings dialogue for the game. Controls music volume
 class SettingsDialog : androidx.fragment.app.DialogFragment() {
 
+    // Default method called when dialogue is created. Returns the view
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -28,13 +30,18 @@ class SettingsDialog : androidx.fragment.app.DialogFragment() {
         // Load settings (?)
         volSlider.value = sharedPref.getFloat(volSave, 1F)
 
+        // Listener for save button
         btnSave.setOnClickListener {
             editor.putFloat(volSave, volSlider.value)
             editor.commit()
         }
+
+        // Listener for mute button
         btnMute.setOnClickListener {
             volSlider.value = 0F;
         }
+
+        // Listener for close/resume button
         btnClose.setOnClickListener {
             this.dismiss()
         }

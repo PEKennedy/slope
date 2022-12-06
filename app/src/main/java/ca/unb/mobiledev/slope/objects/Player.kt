@@ -5,9 +5,10 @@ import ca.unb.mobiledev.slope.Collision
 import ca.unb.mobiledev.slope.GameActivity
 import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.Vec2
-import ca.unb.mobiledev.slope.R//.drawable.skifrog as texture
+import ca.unb.mobiledev.slope.R
 import ca.unb.mobiledev.slope.sensor.AccelerometerSensor
 
+// Player object. Including movement code
 class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int,val activity: GameActivity,
     val obstacles: MutableList<Obstacle>, var accelerometerSensor: AccelerometerSensor)
     :ObjectView(context,displayWidth,displayHeight,objId) {
@@ -31,6 +32,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
 
     var mAccelerometer: AccelerometerSensor = accelerometerSensor
 
+    // Start the game
     override fun start(objMap:Map<String,ObjectView>){
         setBitmap()
         hitObstacle = false
@@ -39,6 +41,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
         position += Vec2(100f,200f)
     }
 
+    // Update method called every frame. Updates position and spawns new/more terrain if needed
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
 
         val terrain:Terrain = objMap["Terrain"] as Terrain

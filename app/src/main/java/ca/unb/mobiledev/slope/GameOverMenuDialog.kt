@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 
-
+// Dialogue that shows when a game over occurs
 class GameOverMenuDialog(actHandle: GameActivity, val distance:Int) : androidx.fragment.app.DialogFragment() {
 
     private val activityHandle = actHandle
@@ -27,16 +27,20 @@ class GameOverMenuDialog(actHandle: GameActivity, val distance:Int) : androidx.f
         val highScore = view.findViewById<TextView>(R.id.best_score_text)
         val newHighScore = view.findViewById<TextView>(R.id.new_high_score_text)
 
+        // Listener for try again button
         btnTryAgain.setOnClickListener {
             activityHandle.startGame()
             activityHandle.unPause()
             this.dismiss()
         }
+
+        // Listener for quit button
         btnQuit.setOnClickListener {
             activityHandle.close()
             this.dismiss()
         }
 
+        // Shared preferences for score saving and display
         val sharedPref = requireActivity().getSharedPreferences(getString(R.string.PREF_FILE_NAME), Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
 

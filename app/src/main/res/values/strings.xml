@@ -9,7 +9,8 @@
     <string name="volume">Volume:</string>
     <string name="mute">MUTE</string>
     <string name="save">Save</string>
-    <string name="close">Close</string>
+    <string name="close">Resume</string>
+    <string name="menu_back">Back</string>
     <string name="pause">Pause</string>
     <string name="pause_menu">Pause Menu</string>
     <string name="settings_no_caps">Settings</string>
