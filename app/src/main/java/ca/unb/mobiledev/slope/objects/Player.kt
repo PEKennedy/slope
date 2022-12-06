@@ -119,7 +119,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                     //terrain.cycleBackground()
                 }
 
-//                terrain.removeOldSegments()
+                terrain.removeOldSegments(segmentNum)
             }
 
         }

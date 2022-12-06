@@ -124,33 +124,30 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
             val height_1 = noise.noise((i+lastSegment)*NOISE_STEP.toDouble(),0.0).toFloat()
             val height_2 = noise.noise((i+1+lastSegment)*NOISE_STEP.toDouble(),0.0).toFloat()
             segments.add(Segment(
-                Vec2((i+lastSegment)*SEGMENT_WIDTH + offset.x,(height_1*HEIGHT_SPREAD) + gradient(lastSegment+i) + offset.y),
-                Vec2((i+1+lastSegment)*SEGMENT_WIDTH + offset.x,(height_2*HEIGHT_SPREAD)+ gradient(lastSegment+1+i) + offset.y))
+                Vec2((i+lastSegment + mPlayerDistance)*SEGMENT_WIDTH + offset.x,(height_1*HEIGHT_SPREAD) + gradient(lastSegment+i) + offset.y),
+                Vec2((i+1+lastSegment + mPlayerDistance)*SEGMENT_WIDTH + offset.x,(height_2*HEIGHT_SPREAD)+ gradient(lastSegment+1+i) + offset.y))
             )
         }
         lastSegment += numSegments+1
         segments.forEach {
             verts_mutable.addAll(it.getVertices(yOffset))
         }
-//        if (segments.size >= 40){
-//            removeOldSegments(segments.size-20)
-//        }
+
         Log.d("Segments", segments.size.toString())
     }
 
-//    fun removeOldSegments(/*numSegments:Int=2*/){
-////        for(i in 0..numSegments){
-////            segments.removeAt(0)
-////        }
-////        lastSegment = segments.size
-//        segments = segments.subList(segments.size-20, segments.size)
-//        lastSegment = segments.size
-//    }
-
-//    fun removeOldSegments(){
-//        mPlayerDistance += playerDistance
-//
-//    }
+    fun removeOldSegments(segmentNum: Int){
+        Log.d("Remove Old", "Called")
+        if (segments.size >= 40){
+            Log.d("Remove Old", "Entered IF statement")
+            mPlayerDistance += segmentNum
+            Log.d("Remove Old", "Distance set")
+            segments = segments.subList(segments.size - 21, segments.size - 1)
+            Log.d("Remove Old", "Added sublist")
+            lastSegment = segments.size - 1
+            Log.d("Remove Old", "Set last")
+        }
+    }
 
     fun displaceSegs(d:Vec2){
         segments.forEach {
@@ -230,18 +227,18 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
 
     fun getSegmentNum(playerPos: Vec2):Int{
         val segmentNum = (playerPos.x/SEGMENT_WIDTH).toInt()
-        if(segmentNum < segments.size) return segmentNum
+        if(segmentNum < (segments.size + mPlayerDistance)) return segmentNum
         return -1
     }
 
     fun getNumSegments():Int{
-        return lastSegment// + mPlayerDistance
+        return lastSegment + mPlayerDistance
     }
 
     private fun getSegmentByPlayerPos(playerPos:Vec2):Segment?{
-        val segmentNum = (playerPos.x/SEGMENT_WIDTH).toInt()
+        val segmentNum = ((playerPos.x)/SEGMENT_WIDTH).toInt() - mPlayerDistance
         //Log.i("SEGMENT NUM",segmentNum.toString())
-        if(segmentNum < segments.size){
+        if(segmentNum < (segments.size)){
             return segments[segmentNum]
         }
         return null
