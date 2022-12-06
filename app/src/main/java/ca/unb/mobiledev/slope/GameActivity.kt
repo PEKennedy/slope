@@ -2,6 +2,7 @@ package ca.unb.mobiledev.slope
 
 import android.app.Activity
 import android.graphics.Point
+import android.hardware.SensorManager
 import android.os.*
 import android.util.Log
 import android.view.GestureDetector
@@ -11,7 +12,10 @@ import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.helper.widget.Layer
+import androidx.constraintlayout.widget.ConstraintLayout
 import ca.unb.mobiledev.slope.objects.*
+import ca.unb.mobiledev.slope.sensor.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -56,6 +60,10 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     var distance = 0
     var wasTouched = false
 
+    // Sensor
+    private lateinit var mSensorManager: SensorManager
+    private lateinit var mAccelerometer : AccelerometerSensor
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -65,14 +73,21 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         }
         mFrame = findViewById(R.id.gameFrame)//findViewById(R.id.frame) //relativeLayout gameFrame
 
+        mFrame!!.setLayerType(Layer.LAYER_TYPE_SOFTWARE,null)
+
         distText = findViewById(R.id.distance)
         distText.text = "testing"
         Log.i("ACTIVITY",btnPause.text.toString())
         //actionBar?.hide()
 
-        val frame = findViewById<RelativeLayout>(R.id.frame)
+        val frame = findViewById<ConstraintLayout>(R.id.frame)
        // frame.setBackgroundColor(0x809FF2)//R.color.gameBackground)
         //mFrame!!.setBackgroundColor(0x809FF2)
+
+        // Sensor
+        mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        mAccelerometer = AccelerometerSensor(mSensorManager, applicationContext)
+        mAccelerometer.register()
 
         startGame()
 
@@ -157,7 +172,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         gameObjects += Pair("Obstacle6",obstacle6)
         obstacles += obstacle6
 
-        val player = Player(applicationContext,width,height,id++,this,obstacles)
+        val player = Player(applicationContext,width,height,id++,this,obstacles, mAccelerometer)
         gameObjects += Pair("Player",player)
 
         gameObjects.values.forEach {
@@ -213,12 +228,14 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
     override fun onDestroy() {
         super.onDestroy()
+        mAccelerometer.unregister()
     }
 
     private fun pause(){
         val fragmentManager = supportFragmentManager
         pauseMenu.show(fragmentManager,"pause_menu")
         isPaused = true
+        mAccelerometer.unregister()
     }
 
     //TODO onPause, onResume >> try to suspend things to conserve battery
@@ -226,10 +243,12 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     override fun onResume() {
         super.onResume()
         setupGestureDetector()
+        mAccelerometer.register()
     }
 
     override fun onPause() {
         super.onPause()
+        mAccelerometer.unregister()
     }
 
     override fun close() {
@@ -238,6 +257,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
     override fun unPause() {
         isPaused = false
+        mAccelerometer.register()
     }
 
     private fun setDistanceText(dist:Int){

@@ -1,14 +1,16 @@
 package ca.unb.mobiledev.slope.objects
 
 import android.content.Context
+import android.util.Log
 import ca.unb.mobiledev.slope.Collision
 import ca.unb.mobiledev.slope.GameActivity
 import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.Vec2
 import ca.unb.mobiledev.slope.R//.drawable.skifrog as texture
+import ca.unb.mobiledev.slope.sensor.AccelerometerSensor
 
 class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: Int,val activity: GameActivity,
-    val obstacles: MutableList<Obstacle>)
+    val obstacles: MutableList<Obstacle>, var accelerometerSensor: AccelerometerSensor)
     :ObjectView(context,displayWidth,displayHeight,objId) {
 
     override val defaultBitmap = R.drawable.skifrog //texture
@@ -27,6 +29,8 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
 
     // How fast to rotate the player character to a new rotation
     var rotationRate = 10.0f
+
+    var mAccelerometer: AccelerometerSensor = accelerometerSensor
 
     override fun start(objMap:Map<String,ObjectView>){
         setBitmap()
@@ -73,12 +77,13 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             }
 
             //physics & controls
+            playerSpeed = Math.max(5f, Math.min(12f, mAccelerometer.getTilt())) // Clamp value between 0 and 10
 
             // Jumping.  Only allow jumping if already on the ground
             if( activity.wasTouched ){
                 if( grounded ){
                     //Log.i("PLAYER","JUMP")
-                    velocity.y -= 800f
+                    velocity.y = -700f
                     grounded = false
                     setBitmap(R.drawable.skifrogjump3)
                 }
@@ -114,7 +119,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                     //terrain.cycleBackground()
                 }
 
-                //terrain.removeOldSegments()
+//                terrain.removeOldSegments()
             }
 
         }
