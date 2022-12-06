@@ -2,7 +2,6 @@ package ca.unb.mobiledev.slope
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -28,6 +27,5 @@ class MainMenuActivity : AppCompatActivity() {
             val creditsDialog = CreditsDialog()
             creditsDialog.show(supportFragmentManager,"credits_menu")
         }
-        
     }
 }

@@ -14,11 +14,9 @@ class HelpDialog: androidx.fragment.app.DialogFragment() {
         val view = inflater.inflate(R.layout.help_menu, container, false)
         val btnClose = view.findViewById<Button>(R.id.btnClose)
         btnClose.setOnClickListener {
-            //activityHandle.unPause()
             this.dismiss()
         }
 
         return view
     }
-
 }

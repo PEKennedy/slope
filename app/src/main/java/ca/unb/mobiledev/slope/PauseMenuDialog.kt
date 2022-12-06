@@ -6,9 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-
 
 class PauseMenuDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFragment() {
     private val activityHandle = actHandle
@@ -25,36 +22,20 @@ class PauseMenuDialog(actHandle: CloseHandle) : androidx.fragment.app.DialogFrag
         val btnClose = view.findViewById<Button>(R.id.btnClose)
 
         btnSettings.setOnClickListener {
-//            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+
             val nextFrag = settingsMenu
-
             nextFrag.show(parentFragmentManager,"SettingsFragment")
-
-           /* requireActivity()
-                .supportFragmentManager
-                .beginTransaction()
-                .addToBackStack("findThisFragment")
-                //.replace(((view as ViewGroup).parent as View).id, nextFrag, "findThisFragment")
-                //.addToBackStack("pause_menu")
-                .commitNow()*/
-            //this.dismiss()
-
-
-//            fragmentManager.beginTransaction()
-//                .replace(((view as ViewGroup).parent as View).id, nextFrag, "findThisFragment")
-//                .addToBackStack(null)
-//                .commit()
-
-//            val fragmentManager = supportFragmentManager//supportFragmentManager
-//            settingsMenu.show(fragmentManager,"settings")
         }
+
         btnHelp.setOnClickListener {
             val nextFrag = helpMenu
             nextFrag.show(parentFragmentManager,"helpFragment")
         }
+
         btnQuit.setOnClickListener {
             activityHandle.close()
         }
+
         btnClose.setOnClickListener {
             activityHandle.unPause()
             this.dismiss()

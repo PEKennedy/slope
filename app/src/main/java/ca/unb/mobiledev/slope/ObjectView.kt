@@ -8,7 +8,6 @@ import android.graphics.Paint
 import android.view.View
 import java.lang.Exception
 
-
 open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int, protected val objId: Int) :
     View(context) {
 
@@ -44,7 +43,6 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
         }
     }
 
-
     @Synchronized
     override fun onDraw(canvas: Canvas) {
         if(hasBitmap) {
@@ -70,11 +68,7 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
                 && objScreenPos.y + BITMAP_SIZE + bitmapOffset.y >= 0
     }
 
-    //val isActive = true
-
     open fun start(objMap:Map<String,ObjectView>){//bitmap:Int=-1){
-        // Smooth out the edges
-        //mPainter.isAntiAlias = true
 
     }
 
@@ -89,7 +83,6 @@ open class ObjectView (context: Context?, displayWidth: Int, displayHeight: Int,
                 this@ObjectView.postInvalidate()
             }
         }
-
     }
 
     protected fun setScreenPos(cameraPos: Vec2) {

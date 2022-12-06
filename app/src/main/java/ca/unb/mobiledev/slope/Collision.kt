@@ -23,10 +23,6 @@ class Collision {
             override fun collideBox(otherBox:BoxCollider):Boolean{
                 if(position.x < otherBox.getFarCoords().x &&
                         getFarCoords().x > otherBox.position.x){
-                //Log.i("Collider",position.toString())
-                //Log.i("Collider",otherBox.position.toString())
-                    //if(position.y < otherBox.getFarCoords().y &&
-                    //    getFarCoords().y > otherBox.position.y){
                     if(getFarCoords().y > otherBox.position.y &&
                         position.y < otherBox.getFarCoords().y){
                         Log.i("Collision",position.toString() + getFarCoords().toString())
@@ -36,8 +32,5 @@ class Collision {
                 }
                 return false
             }
-
-            //fun collideSlope()
         }
-    //}
 }

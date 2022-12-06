@@ -2,13 +2,11 @@ package ca.unb.mobiledev.slope
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.google.android.material.slider.Slider
-
 
 class SettingsDialog : androidx.fragment.app.DialogFragment() {
 
@@ -33,22 +31,14 @@ class SettingsDialog : androidx.fragment.app.DialogFragment() {
         btnSave.setOnClickListener {
             editor.putFloat(volSave, volSlider.value)
             editor.commit()
-
-            Log.i("Save:", "volume value is: " + volSlider.value)
-            Log.i("Storage:", "Stored value is: " + sharedPref.getFloat(volSave, 1F))
         }
         btnMute.setOnClickListener {
             volSlider.value = 0F;
-
-            Log.i("Mute:", "volume value is: " + volSlider.value)
-            Log.i("Storage:", "Stored value is: " + sharedPref.getFloat(volSave, 1F))
         }
         btnClose.setOnClickListener {
-            //activityHandle.unPause()
             this.dismiss()
         }
 
         return view
     }
-
 }

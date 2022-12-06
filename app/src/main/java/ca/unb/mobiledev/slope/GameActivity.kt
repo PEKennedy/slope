@@ -4,7 +4,6 @@ import android.app.Activity
 import android.graphics.Point
 import android.hardware.SensorManager
 import android.os.*
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.WindowInsets
@@ -19,7 +18,6 @@ import ca.unb.mobiledev.slope.sensor.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
-
 
 interface CloseHandle {
     fun close()
@@ -77,16 +75,12 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
         distText = findViewById(R.id.distance)
         distText.text = "testing"
-        Log.i("ACTIVITY",btnPause.text.toString())
-        //actionBar?.hide()
 
         val frame = findViewById<ConstraintLayout>(R.id.frame)
-       // frame.setBackgroundColor(0x809FF2)//R.color.gameBackground)
-        //mFrame!!.setBackgroundColor(0x809FF2)
 
         // Sensor
         mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        mAccelerometer = AccelerometerSensor(mSensorManager, applicationContext)
+        mAccelerometer = AccelerometerSensor(mSensorManager)
         mAccelerometer.register()
 
         startGame()
@@ -111,8 +105,6 @@ class GameActivity : AppCompatActivity(), CloseHandle {
             }
 
             override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
-                //Log.i("TOUCH","TOUCH")
-                //wasTouched = true
                 return true
             }
         })
@@ -124,22 +116,11 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
         mFrame?.removeAllViews()
         //Reset the game state
-        gameObjects.clear() //= mapOf<String,ObjectView>()
+        gameObjects.clear()
 
 
         lastTime = System.currentTimeMillis()
         id = 0
-
-
-        //foreach object (further back in draw order = first)
-        /*val bg1 = Background(applicationContext,width,height,id++)
-        gameObjects += Pair("Bg1",bg1)
-        background += bg1
-
-        val bg2 = Background(applicationContext,width,height,id++)
-        bg2.obType = 1
-        gameObjects += Pair("Bg2",bg2)
-        background += bg2*/
 
         val terrain = Terrain(applicationContext,width,height,id++,obstacles,background)
         gameObjects += Pair("Terrain",terrain)
@@ -238,8 +219,6 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         mAccelerometer.unregister()
     }
 
-    //TODO onPause, onResume >> try to suspend things to conserve battery
-
     override fun onResume() {
         super.onResume()
         setupGestureDetector()
@@ -268,7 +247,6 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (!hasFocus) isPaused = true
-
     }
 
     private fun getScreenDimensions(activity: Activity): Pair<Int, Int> {

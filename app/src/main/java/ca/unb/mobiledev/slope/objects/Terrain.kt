@@ -2,11 +2,8 @@ package ca.unb.mobiledev.slope.objects
 
 import android.content.Context
 import android.graphics.*
-import android.util.Log
-import android.widget.RelativeLayout
 import ca.unb.mobiledev.slope.ObjectView
 import ca.unb.mobiledev.slope.R
-//import ca.unb.mobiledev.slope.R
 import ca.unb.mobiledev.slope.Vec2
 import kotlin.math.atan
 import kotlin.random.Random
@@ -26,7 +23,7 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
     override val defaultBitmap = texture
 
 
-    val y= Random.nextInt()
+    val y = Random.nextInt()
 
     //0 = random seed
     val noise = Noise(0)
@@ -39,7 +36,6 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
     var offset = Vec2(0f,-600f)
 
     private var lastSegment = 0
-    private var mPlayerDistance = 0
 
     var vertExtraOffset = Vec2(0f,0f)
 
@@ -52,38 +48,26 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
         this.shader = shader
     }
 
-    //TODO: find a way to fix rotation, it seems to get the right rotation,
-    //but it also displaces the player up or down
-    //** seems mitigated by having the player to the left of the screen
-    //so it seems affected by screen coordinate
-
     override fun start(objMap:Map<String,ObjectView>){
         generateNewSegments(12,0f)
         for(ob in obstacles){
             cycleObstacle(false)
         }
-
-        //addObstacle(objMap)
     }
 
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
 
-        //val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
-        //obstacle.position = playerCollide(obstacle.position)//segments[2].getSurfacePos(5f)
     }
 
-    //(lastSegment+Random(System.currentTimeMillis()).nextFloat())*SEGMENT_WIDTH
-    //Vec2(800f,0f)
     fun cycleObstacle(checkOnScreen:Boolean=true){
         val sortedObstacles = obstacles.sortedBy { it.position.x }
 
         if((!sortedObstacles[0].isOnScreen() && checkOnScreen) || !checkOnScreen){
             val rand = Random(System.currentTimeMillis()).nextFloat()*3
             val x = (lastSegment.toFloat()+rand-3f)*SEGMENT_WIDTH
-            //Log.i("LAST SEG",lastSegment.toString())
+
             sortedObstacles[0].position = playerCollide(Vec2(x,0f))
             sortedObstacles[0].collider.position = sortedObstacles[0].position
-            //Log.i("CYCLE OB",x.toString())
         }
 
     }
@@ -94,23 +78,11 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
         if(sortedObstacles[0].isOnScreen()){
             val rand = Random(System.currentTimeMillis()).nextFloat()*3
             val x = (lastSegment.toFloat()+rand-3f)*SEGMENT_WIDTH
-            //Log.i("LAST SEG",lastSegment.toString())
+
             sortedObstacles[0].position = playerCollide(Vec2(x,0f))
             sortedObstacles[0].position.y += sortedObstacles[0].yOffset
-            //Log.i("CYCLE OB",x.toString())
         }
     }
-
-    /*private var obstacleCount=  0
-    fun addObstacle(objMap:Map<String,ObjectView>){
-        val ob = Obstacle(context, displayWidth,displayHeight,10)
-        mFrame.addView(ob)
-        ob.start(objMap)
-        ob.position = playerCollide(Vec2((lastSegment+Random(System.currentTimeMillis()).nextFloat())*SEGMENT_WIDTH,0f))
-        obstacles += ob
-        //gameObjects += Pair("Obstacle"+obstacleCount.toString(),ob)
-        //obstacleCount++
-    }*/
 
     private val overallSlope = -0.25f
     fun gradient(seg:Int):Float{
@@ -132,25 +104,7 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
         segments.forEach {
             verts_mutable.addAll(it.getVertices(yOffset))
         }
-//        if (segments.size >= 40){
-//            removeOldSegments(segments.size-20)
-//        }
-        Log.d("Segments", segments.size.toString())
     }
-
-//    fun removeOldSegments(/*numSegments:Int=2*/){
-////        for(i in 0..numSegments){
-////            segments.removeAt(0)
-////        }
-////        lastSegment = segments.size
-//        segments = segments.subList(segments.size-20, segments.size)
-//        lastSegment = segments.size
-//    }
-
-//    fun removeOldSegments(){
-//        mPlayerDistance += playerDistance
-//
-//    }
 
     fun displaceSegs(d:Vec2){
         segments.forEach {
@@ -158,7 +112,6 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
         //    it.r += d
             it.updateCoords(d)
         }
-
     }
 
     private fun displaceVerts(ar:MutableList<Float>,d:Vec2):MutableList<Float>{
@@ -173,7 +126,6 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
             }
             i += 1
         }
-        //Log.i("Terrain",x.toString())
         return x
     }
 
@@ -181,29 +133,19 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
     //we don't want to draw a texture since terrain is autogenerated
     @Synchronized
     override fun onDraw(canvas: Canvas) {
-        //val verts = floatArrayOf(200f,100f,250f, 300f, 400f, 150f)
-
-        //needs to match the length of verts we ask to draw
-        /*val verticesColors = intArrayOf(
-            Color.RED, Color.RED, Color.RED,
-            Color.RED, Color.RED, Color.RED
-        )*/
-
         //triangle_strip lets us reuse some verts
         canvas.drawVertices(Canvas.VertexMode.TRIANGLES,//TRIANGLE_STRIP,//TRIANGLES,
             verts.size, verts,0,
             verts,0,
-        null,0,//verticesColors,0,
+        null,0,
         null,0, 0,
             triPaint//Paint()
         )
-
     }
 
     fun getPlayerAngle(playerPos:Vec2):Float{
         val segment = getSegmentByPlayerPos(playerPos)
         if(segment != null){
-            //Log.i("ROTATE PLAYER",segment.getAngle().toString())
             return Math.toDegrees(segment.getAngle().toDouble()).toFloat()
         }
         return 0f;
@@ -214,7 +156,6 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
         if(segment != null){
             return segment.getSurfacePos(playerPos.x)
         }
-        Log.i("T-P Collide","NO SEGMENT")
         return Vec2(-1f,-1f)
     }
 
@@ -226,8 +167,6 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
         return false
     }
 
-    //TODO: if removeSegment is re-enabled, getSegmentNum seems to give the wrong segment
-
     fun getSegmentNum(playerPos: Vec2):Int{
         val segmentNum = (playerPos.x/SEGMENT_WIDTH).toInt()
         if(segmentNum < segments.size) return segmentNum
@@ -235,12 +174,11 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
     }
 
     fun getNumSegments():Int{
-        return lastSegment// + mPlayerDistance
+        return lastSegment
     }
 
     private fun getSegmentByPlayerPos(playerPos:Vec2):Segment?{
         val segmentNum = (playerPos.x/SEGMENT_WIDTH).toInt()
-        //Log.i("SEGMENT NUM",segmentNum.toString())
         if(segmentNum < segments.size){
             return segments[segmentNum]
         }
@@ -248,15 +186,11 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
     }
 
     override fun render(camera: Vec2) {
-        //super.render(camera)
-
         //displace the vertices' screenposition
         verts = displaceVerts(verts_mutable,-camera).toFloatArray()
         this@Terrain.postInvalidate()
 
     }
-
-
 
     class Segment(val lIn: Vec2, val rIn: Vec2){
         var l = lIn
@@ -316,5 +250,4 @@ class Terrain(context: Context?, val displayWidth: Int, val displayHeight: Int, 
             )
         }
     }
-
 }

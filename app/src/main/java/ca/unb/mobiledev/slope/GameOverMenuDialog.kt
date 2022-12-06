@@ -7,19 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import org.w3c.dom.Text
 
 
 class GameOverMenuDialog(actHandle: GameActivity, val distance:Int) : androidx.fragment.app.DialogFragment() {
 
     private val activityHandle = actHandle
-
-   // private lateinit var textScore: TextView
-
-    //var distance:Int = 0
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -36,7 +28,6 @@ class GameOverMenuDialog(actHandle: GameActivity, val distance:Int) : androidx.f
         val newHighScore = view.findViewById<TextView>(R.id.new_high_score_text)
 
         btnTryAgain.setOnClickListener {
-            //TODO: Need to do something to reset the game here
             activityHandle.startGame()
             activityHandle.unPause()
             this.dismiss()
@@ -68,9 +59,4 @@ class GameOverMenuDialog(actHandle: GameActivity, val distance:Int) : androidx.f
 
         return view
     }
-
-   /* fun setScoreText(distance:Int){
-        textScore.text = "Hi"//"@string/your_score_was" + distance.toString() + "m"
-    }*/
-
 }

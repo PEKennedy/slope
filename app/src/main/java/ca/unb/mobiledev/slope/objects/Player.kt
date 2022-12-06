@@ -1,7 +1,6 @@
 package ca.unb.mobiledev.slope.objects
 
 import android.content.Context
-import android.util.Log
 import ca.unb.mobiledev.slope.Collision
 import ca.unb.mobiledev.slope.GameActivity
 import ca.unb.mobiledev.slope.ObjectView
@@ -36,34 +35,25 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
         setBitmap()
         hitObstacle = false
         //500,200 vs 200,300  //450
-        //context!!.
+
         position += Vec2(100f,200f)
     }
 
     override fun update(deltaT : Float, objMap:Map<String,ObjectView>){
 
-        //val obstacle:Obstacle = objMap["Obstacle1"] as Obstacle
         val terrain:Terrain = objMap["Terrain"] as Terrain
 
         if(terrain != null){
-            //val offsetPos = position //+ Vec2(32f,64f)
             val collided = terrain.checkPlayerCollide(position)
 
-            //TODO: Seems rotation gets messed up based on how far to the
-            //right on the screen the player is??
-            //objRotation = terrain.getPlayerAngle(position)
             objRotation = lerp1d( objRotation, terrain.getPlayerAngle(position), 0.0f ,1.0f, rotationRate*deltaT )
 
             if(collided){
-                //Log.i("COLLISION",collided.toString())
-                //position = terrain.playerCollide(position) - Vec2(0f,10f)
+
                 position = terrain.playerCollide(position)
                 velocity.y = 0F
                 grounded = true
                 setBitmap(R.drawable.skifrog)
-            }
-            else{
-                //setBitmap(R.drawable.skifrogjump1)
             }
 
             // Check for collision with all obstacles
@@ -82,7 +72,6 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             // Jumping.  Only allow jumping if already on the ground
             if( activity.wasTouched ){
                 if( grounded ){
-                    //Log.i("PLAYER","JUMP")
                     velocity.y = -700f
                     grounded = false
                     setBitmap(R.drawable.skifrogjump3)
@@ -98,37 +87,14 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             val segmentNum = terrain.getSegmentNum(position)
             val finalSegment = terrain.getNumSegments()
             if(finalSegment - segmentNum < 10){
-                //val displaceVec = Vec2(-250f*2f,0f)
-               // position += displaceVec
-               // terrain.offset += displaceVec
-
-                //val displacement = -position
-                //activity.resetPositions(displacement)
-                //terrain.displaceSegs(displacement)
-
-                //terrain.displaceSegs(Vec2(displacement.x,-displacement.y))
-
-                //terrain.offset += displacement
-                //terrain.vertExtraOffset += displacement
-
-                //position += displacement
 
                 terrain.generateNewSegments(4,position.y)
                 if((0..10).random() < 8){
                     terrain.cycleObstacle()
-                    //terrain.cycleBackground()
                 }
-
-//                terrain.removeOldSegments()
             }
-
         }
-
-
         collider.position = position
-
-
-
     }
 
     // Linear interpolation between x1y1 and x2y2, given x
@@ -136,5 +102,4 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
         val y = y1+(x-x1)*(( y2-y1 )/(x2-x1))
         return y
     }
-
 }
