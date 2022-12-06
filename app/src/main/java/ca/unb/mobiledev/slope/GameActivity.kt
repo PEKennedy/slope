@@ -12,6 +12,8 @@ import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.helper.widget.Layer
+import androidx.constraintlayout.widget.ConstraintLayout
 import ca.unb.mobiledev.slope.objects.*
 import ca.unb.mobiledev.slope.sensor.*
 import java.util.concurrent.Executors
@@ -71,12 +73,14 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         }
         mFrame = findViewById(R.id.gameFrame)//findViewById(R.id.frame) //relativeLayout gameFrame
 
+        mFrame!!.setLayerType(Layer.LAYER_TYPE_SOFTWARE,null)
+
         distText = findViewById(R.id.distance)
         distText.text = "testing"
         Log.i("ACTIVITY",btnPause.text.toString())
         //actionBar?.hide()
 
-        val frame = findViewById<RelativeLayout>(R.id.frame)
+        val frame = findViewById<ConstraintLayout>(R.id.frame)
        // frame.setBackgroundColor(0x809FF2)//R.color.gameBackground)
         //mFrame!!.setBackgroundColor(0x809FF2)
 
