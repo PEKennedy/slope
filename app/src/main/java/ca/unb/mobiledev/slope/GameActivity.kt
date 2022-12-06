@@ -24,6 +24,7 @@ interface CloseHandle {
     fun unPause()
 }
 
+// Activity for gameplay. Main activity experienced while using the app
 class GameActivity : AppCompatActivity(), CloseHandle {
 
     private var mFrame: RelativeLayout? = null
@@ -32,7 +33,6 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     private val pauseMenu = PauseMenuDialog(this)
 
     private var gestureDetector: GestureDetector? = null
-
 
     private var id = 0
 
@@ -62,6 +62,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
     private lateinit var mSensorManager: SensorManager
     private lateinit var mAccelerometer : AccelerometerSensor
 
+    // Setup values when activity is created.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -87,6 +88,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
 
     }
 
+    // Touch event handler, for jumping ingame
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         gestureDetector!!.onTouchEvent(event)
         return super.onTouchEvent(event)
@@ -110,6 +112,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         })
     }
 
+    // Starts game. Initializes gameplay related variables and objects
     fun startGame(){
         // Determine the screen size
         val (width, height) = getScreenDimensions(this)
@@ -187,10 +190,10 @@ class GameActivity : AppCompatActivity(), CloseHandle {
                 cameraPos = player.position + Vec2(-300f,-400f)
             }
 
-
         }, 0, REFRESH_RATE.toLong(), TimeUnit.MILLISECONDS)
     }
 
+    // Unused function to reset game object positions
     fun resetPositions(offset:Vec2){
         gameObjects.values.forEach{
             it.position += offset
@@ -198,6 +201,7 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         cameraPos += offset
     }
 
+    // Gets called when a game over is registered. Stops the game.
     fun gameOver(){
         if(!isPaused){
             val gameOverMenu = GameOverMenuDialog(this,distance)
@@ -207,11 +211,13 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         }
     }
 
+    // Default activity method when activity is destroyed. Unregisters sensor
     override fun onDestroy() {
         super.onDestroy()
         mAccelerometer.unregister()
     }
 
+    // Gets called when game is paused by player
     private fun pause(){
         val fragmentManager = supportFragmentManager
         pauseMenu.show(fragmentManager,"pause_menu")
@@ -219,36 +225,43 @@ class GameActivity : AppCompatActivity(), CloseHandle {
         mAccelerometer.unregister()
     }
 
+    // Default activity method when activity is resumed.
     override fun onResume() {
         super.onResume()
         setupGestureDetector()
         mAccelerometer.register()
     }
 
+    // Default activity method when activity is paused.
     override fun onPause() {
         super.onPause()
         mAccelerometer.unregister()
     }
 
+    // Default activity method on close.
     override fun close() {
         finish()
     }
 
+    // Default activity method when activity is unPaused.
     override fun unPause() {
         isPaused = false
         mAccelerometer.register()
     }
 
+    // Sets the text that shows player distance travevled
     private fun setDistanceText(dist:Int){
         distance = dist
         distText.text = dist.toString() + "m"
     }
 
+    // Default activity method when window focus changes
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (!hasFocus) isPaused = true
     }
 
+    // Returns current screen dimensions
     private fun getScreenDimensions(activity: Activity): Pair<Int, Int> {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val windowMetrics = activity.windowManager.currentWindowMetrics
