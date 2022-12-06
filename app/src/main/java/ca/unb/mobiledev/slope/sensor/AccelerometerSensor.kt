@@ -50,7 +50,7 @@ class AccelerometerSensor : SensorEventListener{
                 mLastUpdate = actualTime
 
             }
-            mTilt = event.values[1]// - (mGravity[1] * 0.8F + event.values[1] * (1 - 0.8F))
+            mTilt = event.values[1] * 2// - (mGravity[1] * 0.8F + event.values[1] * (1 - 0.8F))
         }
     }
 

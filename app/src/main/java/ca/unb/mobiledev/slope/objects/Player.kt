@@ -77,14 +77,13 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
             }
 
             //physics & controls
-            playerSpeed = mAccelerometer.getTilt()
-            Log.d("Speed", playerSpeed.toString())
+            playerSpeed = Math.max(5f, Math.min(12f, mAccelerometer.getTilt())) // Clamp value between 0 and 10
 
             // Jumping.  Only allow jumping if already on the ground
             if( activity.wasTouched ){
                 if( grounded ){
                     //Log.i("PLAYER","JUMP")
-                    velocity.y -= 800f
+                    velocity.y = -700f
                     grounded = false
                     setBitmap(R.drawable.skifrogjump3)
                 }
@@ -120,7 +119,7 @@ class Player(context: Context?, displayWidth: Int, displayHeight: Int, objId: In
                     //terrain.cycleBackground()
                 }
 
-                //terrain.removeOldSegments()
+//                terrain.removeOldSegments()
             }
 
         }
