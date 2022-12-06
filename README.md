@@ -7,6 +7,40 @@ This is a game where the player guides their character down an infinite slope, a
 
 The project code is contained in the ca.unb.mobiledev.slope package
 
+### Release 1.0 notes: 
+- Supports android API version 24 
+- Button to clear save data 
+- Button and dialog to view credits 
+- All dialogs can be closed 
+- Button to play the game 
+- Main Menu supports landscape and portrait orientations based on sensor, game activity only supports landscape. 
+- Game activity has pause button located in easy to reach area for users 
+- Game activity has text to track distance the player character has traveled 
+- Pause menu dialog has: 
+- Quit to main menu button 
+- Help dialog button 
+- Settings dialog (saves a volume value which goes unused, as there are no sounds in the game) 
+
+- Game features player character which moves to the right of the screen at a varying velocity based on the phone’s tilt 
+- Screen can be tapped to make the player jumped 
+- Player changes displayed bitmap based on state 
+- Terrain generates a continuous downwards slope, the exact shape varies 
+- Obstacles are generated all the way down the slope 
+- Colliding with an obstacle generates a gameover condition 
+- Gameover sets displays the distance achieved, last distance achieved, and the user’s all time high score. It displays additional “New High Score” text if the user just set a new record. 
+
+### Known Issues: 
+- Inconsistent issue where the player “crashes” on invisible obstacles 
+- Player bounces along the slope’s surface 
+- Obstacles may overlap, especially when first appearing 
+- Obstacle generation may sometimes petter out 
+- No sound to go with the volume settings we made for it 
+- Terrain is never unloaded, this will eventually cause a memory leak 
+- Player is never recentered, thus the player’s position will eventually be subject to floating point rounding errors 
+
+
+## Code Overview
+
 This is a high level overview of the code base. Please see the kotlin files contained within for more details.
 
 ### The following are the activity files:
